@@ -116,8 +116,8 @@ start{
     Sum = Add(Num1, Num2);
     Difference = Subtract(Num1, Num2);
 
-    output "Sum: " + Sum;
-    output "Difference: " + Difference;
+    output Sum;
+    output Difference;
 } finish
 ```
 ### Compilation and Execution
