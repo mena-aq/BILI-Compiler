@@ -1,0 +1,8 @@
+#* Block Comment *#
+start {
+    Alpha = Beta ** 2.5;
+    ## Test Errors
+    badVar = "Unclosed String;
+    BigIdentifierIsActuallyTooLongToBeValidHere = 10.5.2;
+}
+finish

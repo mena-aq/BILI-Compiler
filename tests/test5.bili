@@ -1,0 +1,11 @@
+start {
+    declare INT 123Invalid = 10;   ## Error: Starts with number
+    declare FLOAT Bad = 1.2.3.4;   ## Error: Too many dots
+
+    ValidVar = 50;                 ## Valid
+
+    $#@!                           ## Error: Unknown symbols
+
+    declare STRING CutOff = "Oops  ## Error: Unterminated
+}
+finish

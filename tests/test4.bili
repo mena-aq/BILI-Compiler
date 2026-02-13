@@ -1,0 +1,10 @@
+start {
+    declare FLOAT Sci = +5.5e-10;
+    declare STRING Path = "C:\\Users\\Guest";
+    declare CHAR Grade = 'A';
+    declare BOOLEAN Flag = false;
+
+    ## Mixed arithmetic with different literal formats
+    Sci = Sci * 10.0 + 100;
+}
+finish

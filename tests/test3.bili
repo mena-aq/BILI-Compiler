@@ -1,0 +1,13 @@
+start {
+    declare INT X = 10;
+    loop (X > 0) {
+        condition (X >= 5 && X != 7) {
+            output("Midpoint");
+            X--;
+        } else {
+            X = X ** 2;
+            break;
+        }
+    }
+}
+finish
