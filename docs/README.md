@@ -145,3 +145,5 @@ where `<path_to_your_bili_file>` is the path to your `.bili` file and `<scan-mod
 **BILI**, brought to you by:
 * Imama Sarwar (23I-3048)
 * Menahil Ahmad (23I-0546)
+<img width="200" height="80" alt="image" src="https://github.com/user-attachments/assets/24f55df3-6d16-4b48-8fcf-7b6f1f411128" />
+
