@@ -91,7 +91,7 @@ start{
     output "Factorial is: " + result;
 } finish
 ```
-**Modular BILI Program for **
+**Modular BILI Program for Sum and Difference**
 ```
 function Add(A, B) {
     return A + B;
