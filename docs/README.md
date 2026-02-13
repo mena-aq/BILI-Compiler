@@ -136,7 +136,7 @@ javac -d out src/*.java
 ```
 java -cp out Main <path_to_your_bili_file> <scan-mode>
 ```
-where `<path_to_your_bili_file>` is the path to your `.bili` file and `<scan-mode>' is any of the following:
+where `<path_to_your_bili_file>` is the path to your `.bili` file and  `<scan-mode>` is any of the following:
 * manual: tokenize the input using the manual scanner
 * flex: tokenize the input using the JFlex generated scanner
 * manual-flex: tokenize the input using both scanners
