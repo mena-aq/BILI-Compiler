@@ -1,0 +1,519 @@
+test/test1.bili
+
+    --- Running Manual Scanner ---
+    [ERROR] Type: ERROR | Line: 3, Col: 3 | Lexeme: 'z' | Reason: Invalid identifier (must start with Uppercase)
+    <START, "start", Line: 4, Col: 1>
+    <LEFT_BRACE, "{", Line: 4, Col: 7>
+    <DIV, "/", Line: 5, Col: 1>
+    <MUL, "*", Line: 5, Col: 2>
+    <IDENTIFIER, "Valid", Line: 5, Col: 4>
+    <IDENTIFIER, "Declarations", Line: 5, Col: 10>
+    <MUL, "*", Line: 5, Col: 23>
+    <DIV, "/", Line: 5, Col: 24>
+    <DECLARE, "declare", Line: 6, Col: 1>
+    <IDENTIFIER, "INT", Line: 6, Col: 9>
+    <IDENTIFIER, "Alpha", Line: 6, Col: 13>
+    <ASSIGN, "=", Line: 6, Col: 19>
+    <INTEGER, "100", Line: 6, Col: 21>
+    <SEMICOLON, ";", Line: 6, Col: 24>
+    <DECLARE, "declare", Line: 7, Col: 1>
+    <IDENTIFIER, "FLOAT", Line: 7, Col: 9>
+    <IDENTIFIER, "Beta", Line: 7, Col: 15>
+    <ASSIGN, "=", Line: 7, Col: 20>
+    <FLOAT, "3.1415", Line: 7, Col: 22>
+    <SEMICOLON, ";", Line: 7, Col: 28>
+    <DECLARE, "declare", Line: 8, Col: 1>
+    <IDENTIFIER, "STRING", Line: 8, Col: 9>
+    <IDENTIFIER, "Greeting", Line: 8, Col: 16>
+    <ASSIGN, "=", Line: 8, Col: 25>
+    <STRING, ""Hello, Lexer!"", Line: 8, Col: 27>
+    <SEMICOLON, ";", Line: 8, Col: 42>
+    <DECLARE, "declare", Line: 9, Col: 1>
+    <IDENTIFIER, "BOOLEAN", Line: 9, Col: 9>
+    <IDENTIFIER, "IsActive", Line: 9, Col: 17>
+    <ASSIGN, "=", Line: 9, Col: 26>
+    <BOOLEAN, "true", Line: 9, Col: 28>
+    <SEMICOLON, ";", Line: 9, Col: 32>
+    <DECLARE, "declare", Line: 11, Col: 1>
+    <IDENTIFIER, "INT", Line: 11, Col: 9>
+    [ERROR] Type: ERROR | Line: 11, Col: 13 | Lexeme: 'count' | Reason: Invalid identifier (must start with Uppercase)
+    <ASSIGN, "=", Line: 11, Col: 19>
+    <INTEGER, "5", Line: 11, Col: 21>
+    <SEMICOLON, ";", Line: 11, Col: 22>
+    <DECLARE, "declare", Line: 13, Col: 1>
+    <IDENTIFIER, "FLOAT", Line: 13, Col: 9>
+    <IDENTIFIER, "BadNum", Line: 13, Col: 15>
+    <ASSIGN, "=", Line: 13, Col: 22>
+    [ERROR] Type: ERROR | Line: 13, Col: 24 | Lexeme: '10.5.2' | Reason: Malformed numeric literal (multiple decimal points)
+    <SEMICOLON, ";", Line: 13, Col: 30>
+    <DECLARE, "declare", Line: 15, Col: 1>
+    <IDENTIFIER, "INT", Line: 15, Col: 9>
+    [ERROR] Type: ERROR | Line: 15, Col: 13 | Lexeme: 'ThisIsAVeryLongIdentifierThatShouldExceedTheLimit' | Reason: Identifier exceeds maximum length (31)
+    <ASSIGN, "=", Line: 15, Col: 63>
+    <INTEGER, "99", Line: 15, Col: 65>
+    <SEMICOLON, ";", Line: 15, Col: 67>
+    <DECLARE, "declare", Line: 17, Col: 1>
+    <IDENTIFIER, "STRING", Line: 17, Col: 9>
+    <IDENTIFIER, "Broken", Line: 17, Col: 16>
+    <ASSIGN, "=", Line: 17, Col: 23>
+    ' | Reason: Unterminated string literal | Lexeme: '"Forgot to close this;
+    <DIV, "/", Line: 19, Col: 5>
+    <MUL, "*", Line: 19, Col: 6>
+    <IDENTIFIER, "Testing", Line: 19, Col: 8>
+    <IDENTIFIER, "Multi", Line: 19, Col: 16>
+    <SUB, "-", Line: 19, Col: 21>
+    [ERROR] Type: ERROR | Line: 19, Col: 22 | Lexeme: 'character' | Reason: Invalid identifier (must start with Uppercase)
+    <IDENTIFIER, "Operators", Line: 19, Col: 32>
+    <MUL, "*", Line: 19, Col: 42>
+    <DIV, "/", Line: 19, Col: 43>
+    <IDENTIFIER, "Alpha", Line: 20, Col: 5>
+    <ASSIGN, "=", Line: 20, Col: 11>
+    <IDENTIFIER, "Alpha", Line: 20, Col: 13>
+    <EXP, "**", Line: 20, Col: 19>
+    <INTEGER, "2", Line: 20, Col: 22>
+    <SEMICOLON, ";", Line: 20, Col: 23>
+    <IDENTIFIER, "Alpha", Line: 21, Col: 5>
+    <ADD_ASSIGN, "+=", Line: 21, Col: 11>
+    <INTEGER, "10", Line: 21, Col: 14>
+    <SEMICOLON, ";", Line: 21, Col: 16>
+    <CONDITION, "condition", Line: 23, Col: 5>
+    <LEFT_PAREN, "(", Line: 23, Col: 15>
+    <IDENTIFIER, "Alpha", Line: 23, Col: 16>
+    <GREATER_EQUAL, ">=", Line: 23, Col: 22>
+    <INTEGER, "100", Line: 23, Col: 25>
+    <LOGICAL_AND, "&&", Line: 23, Col: 29>
+    <IDENTIFIER, "IsActive", Line: 23, Col: 32>
+    <EQUAL, "==", Line: 23, Col: 41>
+    <BOOLEAN, "true", Line: 23, Col: 44>
+    <RIGHT_PAREN, ")", Line: 23, Col: 48>
+    <LEFT_BRACE, "{", Line: 23, Col: 50>
+    <OUTPUT, "output", Line: 24, Col: 9>
+    <LEFT_PAREN, "(", Line: 24, Col: 15>
+    <STRING, ""Success"", Line: 24, Col: 16>
+    <RIGHT_PAREN, ")", Line: 24, Col: 25>
+    <SEMICOLON, ";", Line: 24, Col: 26>
+    <RIGHT_BRACE, "}", Line: 25, Col: 5>
+    <ELSE, "else", Line: 25, Col: 7>
+    <LEFT_BRACE, "{", Line: 25, Col: 12>
+    <LOOP, "loop", Line: 26, Col: 9>
+    <LEFT_PAREN, "(", Line: 26, Col: 14>
+    <IDENTIFIER, "Alpha", Line: 26, Col: 15>
+    <GREATER_THAN, ">", Line: 26, Col: 21>
+    <INTEGER, "0", Line: 26, Col: 23>
+    <RIGHT_PAREN, ")", Line: 26, Col: 24>
+    <LEFT_BRACE, "{", Line: 26, Col: 26>
+    <IDENTIFIER, "Alpha", Line: 27, Col: 13>
+    <DEC, "--", Line: 27, Col: 18>
+    <SEMICOLON, ";", Line: 27, Col: 20>
+    <BREAK, "break", Line: 28, Col: 13>
+    <SEMICOLON, ";", Line: 28, Col: 18>
+    <RIGHT_BRACE, "}", Line: 29, Col: 9>
+    <RIGHT_BRACE, "}", Line: 30, Col: 5>
+    [ERROR] Type: ERROR | Line: 33, Col: 5 | Lexeme: '#* This comment never ends...
+
+        return 0;
+    }
+    finish' | Reason: Unclosed multi-line comment
+
+    --- Running JFlex Lexer ---
+    [ERROR] Type: ERROR | Line: 3, Col: 3 | Lexeme: 'z' | Reason: Invalid identifier (must start with Uppercase)
+    <START, "start", Line: 5, Col: 1>
+    <LEFT_BRACE, "{", Line: 5, Col: 7>
+    <DIV, "/", Line: 6, Col: 5>
+    <MUL, "*", Line: 6, Col: 6>
+    <IDENTIFIER, "Valid", Line: 6, Col: 8>
+    <IDENTIFIER, "Declarations", Line: 6, Col: 14>
+    <MUL, "*", Line: 6, Col: 27>
+    <DIV, "/", Line: 6, Col: 28>
+    <DECLARE, "declare", Line: 7, Col: 5>
+    <IDENTIFIER, "INT", Line: 7, Col: 13>
+    <IDENTIFIER, "Alpha", Line: 7, Col: 17>
+    <ASSIGN, "=", Line: 7, Col: 23>
+    <INTEGER, "100", Line: 7, Col: 25>
+    <SEMICOLON, ";", Line: 7, Col: 28>
+    <DECLARE, "declare", Line: 8, Col: 5>
+    <IDENTIFIER, "FLOAT", Line: 8, Col: 13>
+    <IDENTIFIER, "Beta", Line: 8, Col: 19>
+    <ASSIGN, "=", Line: 8, Col: 24>
+    <FLOAT, "3.1415", Line: 8, Col: 26>
+    <SEMICOLON, ";", Line: 8, Col: 32>
+    <DECLARE, "declare", Line: 9, Col: 5>
+    <IDENTIFIER, "STRING", Line: 9, Col: 13>
+    <IDENTIFIER, "Greeting", Line: 9, Col: 20>
+    <ASSIGN, "=", Line: 9, Col: 29>
+    <STRING, ""Hello, Lexer!"", Line: 9, Col: 31>
+    <SEMICOLON, ";", Line: 9, Col: 46>
+    <DECLARE, "declare", Line: 10, Col: 5>
+    <IDENTIFIER, "BOOLEAN", Line: 10, Col: 13>
+    <IDENTIFIER, "IsActive", Line: 10, Col: 21>
+    <ASSIGN, "=", Line: 10, Col: 30>
+    <BOOLEAN, "true", Line: 10, Col: 32>
+    <SEMICOLON, ";", Line: 10, Col: 36>
+    <DECLARE, "declare", Line: 13, Col: 5>
+    <IDENTIFIER, "INT", Line: 13, Col: 13>
+    [ERROR] Type: ERROR | Line: 13, Col: 17 | Lexeme: 'count' | Reason: Invalid identifier (must start with Uppercase)
+    <ASSIGN, "=", Line: 13, Col: 23>
+    <INTEGER, "5", Line: 13, Col: 25>
+    <SEMICOLON, ";", Line: 13, Col: 26>
+    <DECLARE, "declare", Line: 16, Col: 5>
+    <IDENTIFIER, "FLOAT", Line: 16, Col: 13>
+    <IDENTIFIER, "BadNum", Line: 16, Col: 19>
+    <ASSIGN, "=", Line: 16, Col: 26>
+    [ERROR] Type: ERROR | Line: 16, Col: 28 | Lexeme: '10.5.2' | Reason: Malformed numeric literal (multiple decimal points)
+    <SEMICOLON, ";", Line: 16, Col: 34>
+    <DECLARE, "declare", Line: 19, Col: 5>
+    <IDENTIFIER, "INT", Line: 19, Col: 13>
+    [ERROR] Type: ERROR | Line: 19, Col: 17 | Lexeme: 'ThisIsAVeryLongIdentifierThatShouldExceedTheLimit' | Reason: Identifier exceeds maximum length (31)
+    <ASSIGN, "=", Line: 19, Col: 67>
+    <INTEGER, "99", Line: 19, Col: 69>
+    <SEMICOLON, ";", Line: 19, Col: 71>
+    <DECLARE, "declare", Line: 22, Col: 5>
+    <IDENTIFIER, "STRING", Line: 22, Col: 13>
+    <IDENTIFIER, "Broken", Line: 22, Col: 20>
+    <ASSIGN, "=", Line: 22, Col: 27>
+    ' | Reason: Unterminated string literal | Lexeme: '"Forgot to close this;
+    <DIV, "/", Line: 24, Col: 5>
+    <MUL, "*", Line: 24, Col: 6>
+    <IDENTIFIER, "Testing", Line: 24, Col: 8>
+    <IDENTIFIER, "Multi", Line: 24, Col: 16>
+    <SUB, "-", Line: 24, Col: 21>
+    [ERROR] Type: ERROR | Line: 24, Col: 22 | Lexeme: 'character' | Reason: Invalid identifier (must start with Uppercase)
+    <IDENTIFIER, "Operators", Line: 24, Col: 32>
+    <MUL, "*", Line: 24, Col: 42>
+    <DIV, "/", Line: 24, Col: 43>
+    <IDENTIFIER, "Alpha", Line: 25, Col: 5>
+    <ASSIGN, "=", Line: 25, Col: 11>
+    <IDENTIFIER, "Alpha", Line: 25, Col: 13>
+    <EXP, "**", Line: 25, Col: 19>
+    <INTEGER, "2", Line: 25, Col: 22>
+    <SEMICOLON, ";", Line: 25, Col: 23>
+    <IDENTIFIER, "Alpha", Line: 26, Col: 5>
+    <ADD_ASSIGN, "+=", Line: 26, Col: 11>
+    <INTEGER, "10", Line: 26, Col: 14>
+    <SEMICOLON, ";", Line: 26, Col: 16>
+    <CONDITION, "condition", Line: 28, Col: 5>
+    <LEFT_PAREN, "(", Line: 28, Col: 15>
+    <IDENTIFIER, "Alpha", Line: 28, Col: 16>
+    <GREATER_EQUAL, ">=", Line: 28, Col: 22>
+    <INTEGER, "100", Line: 28, Col: 25>
+    <LOGICAL_AND, "&&", Line: 28, Col: 29>
+    <IDENTIFIER, "IsActive", Line: 28, Col: 32>
+    <EQUAL, "==", Line: 28, Col: 41>
+    <BOOLEAN, "true", Line: 28, Col: 44>
+    <RIGHT_PAREN, ")", Line: 28, Col: 48>
+    <LEFT_BRACE, "{", Line: 28, Col: 50>
+    <OUTPUT, "output", Line: 29, Col: 9>
+    <LEFT_PAREN, "(", Line: 29, Col: 15>
+    <STRING, ""Success"", Line: 29, Col: 16>
+    <RIGHT_PAREN, ")", Line: 29, Col: 25>
+    <SEMICOLON, ";", Line: 29, Col: 26>
+    <RIGHT_BRACE, "}", Line: 30, Col: 5>
+    <ELSE, "else", Line: 30, Col: 7>
+    <LEFT_BRACE, "{", Line: 30, Col: 12>
+    <LOOP, "loop", Line: 31, Col: 9>
+    <LEFT_PAREN, "(", Line: 31, Col: 14>
+    <IDENTIFIER, "Alpha", Line: 31, Col: 15>
+    <GREATER_THAN, ">", Line: 31, Col: 21>
+    <INTEGER, "0", Line: 31, Col: 23>
+    <RIGHT_PAREN, ")", Line: 31, Col: 24>
+    <LEFT_BRACE, "{", Line: 31, Col: 26>
+    <IDENTIFIER, "Alpha", Line: 32, Col: 13>
+    <DEC, "--", Line: 32, Col: 18>
+    <SEMICOLON, ";", Line: 32, Col: 20>
+    <BREAK, "break", Line: 33, Col: 13>
+    <SEMICOLON, ";", Line: 33, Col: 18>
+    <RIGHT_BRACE, "}", Line: 34, Col: 9>
+    <RIGHT_BRACE, "}", Line: 35, Col: 5>
+    [ERROR] Type: ERROR | Line: 38, Col: 5 | Lexeme: '#* This comment never ends...
+
+        return 0;
+    }
+    finish' | Reason: Unclosed multi-line comment
+
+test/test2.bili
+
+    --- Running Manual Scanner ---
+    <START, "start", Line: 2, Col: 1>
+    <LEFT_BRACE, "{", Line: 2, Col: 7>
+    <IDENTIFIER, "Alpha", Line: 3, Col: 1>
+    <ASSIGN, "=", Line: 3, Col: 7>
+    <IDENTIFIER, "Beta", Line: 3, Col: 9>
+    <EXP, "**", Line: 3, Col: 14>
+    <FLOAT, "2.5", Line: 3, Col: 17>
+    <SEMICOLON, ";", Line: 3, Col: 20>
+    [ERROR] Type: ERROR | Line: 5, Col: 1 | Lexeme: 'badVar' | Reason: Invalid identifier (must start with Uppercase)
+    <ASSIGN, "=", Line: 5, Col: 8>
+    ' | Reason: Unterminated string literal| Lexeme: '"Unclosed String;
+    [ERROR] Type: ERROR | Line: 6, Col: 5 | Lexeme: 'BigIdentifierIsActuallyTooLongToBeValidHere' | Reason: Identifier exceeds maximum length (31)
+    <ASSIGN, "=", Line: 6, Col: 49>
+    [ERROR] Type: ERROR | Line: 6, Col: 51 | Lexeme: '10.5.2' | Reason: Malformed numeric literal (multiple decimal points)
+    <SEMICOLON, ";", Line: 6, Col: 57>
+    <RIGHT_BRACE, "}", Line: 7, Col: 1>
+    <FINISH, "finish", Line: 8, Col: 1>
+
+    --- Running JFlex Lexer ---
+    <START, "start", Line: 2, Col: 1>
+    <LEFT_BRACE, "{", Line: 2, Col: 7>
+    <IDENTIFIER, "Alpha", Line: 3, Col: 5>
+    <ASSIGN, "=", Line: 3, Col: 11>
+    <IDENTIFIER, "Beta", Line: 3, Col: 13>
+    <EXP, "**", Line: 3, Col: 18>
+    <FLOAT, "2.5", Line: 3, Col: 21>
+    <SEMICOLON, ";", Line: 3, Col: 24>
+    [ERROR] Type: ERROR | Line: 5, Col: 5 | Lexeme: 'badVar' | Reason: Invalid identifier (must start with Uppercase)
+    <ASSIGN, "=", Line: 5, Col: 12>
+    ' | Reason: Unterminated string literal| Lexeme: '"Unclosed String;
+    [ERROR] Type: ERROR | Line: 6, Col: 5 | Lexeme: 'BigIdentifierIsActuallyTooLongToBeValidHere' | Reason: Identifier exceeds maximum length (31)
+    <ASSIGN, "=", Line: 6, Col: 49>
+    [ERROR] Type: ERROR | Line: 6, Col: 51 | Lexeme: '10.5.2' | Reason: Malformed numeric literal (multiple decimal points)
+    <SEMICOLON, ";", Line: 6, Col: 57>
+    <RIGHT_BRACE, "}", Line: 7, Col: 1>
+    <FINISH, "finish", Line: 8, Col: 1>
+
+test/test3.bili
+
+    --- Running Manual Scanner ---
+    <START, "start", Line: 1, Col: 1>
+    <LEFT_BRACE, "{", Line: 1, Col: 7>
+    <DECLARE, "declare", Line: 2, Col: 1>
+    <IDENTIFIER, "INT", Line: 2, Col: 9>
+    <IDENTIFIER, "X", Line: 2, Col: 13>
+    <ASSIGN, "=", Line: 2, Col: 15>
+    <INTEGER, "10", Line: 2, Col: 17>
+    <SEMICOLON, ";", Line: 2, Col: 19>
+    <LOOP, "loop", Line: 3, Col: 1>
+    <LEFT_PAREN, "(", Line: 3, Col: 6>
+    <IDENTIFIER, "X", Line: 3, Col: 7>
+    <GREATER_THAN, ">", Line: 3, Col: 9>
+    <INTEGER, "0", Line: 3, Col: 11>
+    <RIGHT_PAREN, ")", Line: 3, Col: 12>
+    <LEFT_BRACE, "{", Line: 3, Col: 14>
+    <CONDITION, "condition", Line: 4, Col: 1>
+    <LEFT_PAREN, "(", Line: 4, Col: 11>
+    <IDENTIFIER, "X", Line: 4, Col: 12>
+    <GREATER_EQUAL, ">=", Line: 4, Col: 14>
+    <INTEGER, "5", Line: 4, Col: 17>
+    <LOGICAL_AND, "&&", Line: 4, Col: 19>
+    <IDENTIFIER, "X", Line: 4, Col: 22>
+    <NOT_EQUAL, "!=", Line: 4, Col: 24>
+    <INTEGER, "7", Line: 4, Col: 27>
+    <RIGHT_PAREN, ")", Line: 4, Col: 28>
+    <LEFT_BRACE, "{", Line: 4, Col: 30>
+    <OUTPUT, "output", Line: 5, Col: 1>
+    <LEFT_PAREN, "(", Line: 5, Col: 7>
+    <STRING, ""Midpoint"", Line: 5, Col: 8>
+    <RIGHT_PAREN, ")", Line: 5, Col: 18>
+    <SEMICOLON, ";", Line: 5, Col: 19>
+    <IDENTIFIER, "X", Line: 6, Col: 1>
+    <DEC, "--", Line: 6, Col: 2>
+    <SEMICOLON, ";", Line: 6, Col: 4>
+    <RIGHT_BRACE, "}", Line: 7, Col: 1>
+    <ELSE, "else", Line: 7, Col: 3>
+    <LEFT_BRACE, "{", Line: 7, Col: 8>
+    <IDENTIFIER, "X", Line: 8, Col: 1>
+    <ASSIGN, "=", Line: 8, Col: 3>
+    <IDENTIFIER, "X", Line: 8, Col: 5>
+    <EXP, "**", Line: 8, Col: 7>
+    <INTEGER, "2", Line: 8, Col: 10>
+    <SEMICOLON, ";", Line: 8, Col: 11>
+    <BREAK, "break", Line: 9, Col: 1>
+    <SEMICOLON, ";", Line: 9, Col: 6>
+    <RIGHT_BRACE, "}", Line: 10, Col: 1>
+    <RIGHT_BRACE, "}", Line: 11, Col: 1>
+    <RIGHT_BRACE, "}", Line: 12, Col: 1>
+    <FINISH, "finish", Line: 13, Col: 1>
+
+    --- Running JFlex Lexer ---
+    <START, "start", Line: 1, Col: 1>
+    <LEFT_BRACE, "{", Line: 1, Col: 7>
+    <DECLARE, "declare", Line: 2, Col: 5>
+    <IDENTIFIER, "INT", Line: 2, Col: 13>
+    <IDENTIFIER, "X", Line: 2, Col: 17>
+    <ASSIGN, "=", Line: 2, Col: 19>
+    <INTEGER, "10", Line: 2, Col: 21>
+    <SEMICOLON, ";", Line: 2, Col: 23>
+    <LOOP, "loop", Line: 3, Col: 5>
+    <LEFT_PAREN, "(", Line: 3, Col: 10>
+    <IDENTIFIER, "X", Line: 3, Col: 11>
+    <GREATER_THAN, ">", Line: 3, Col: 13>
+    <INTEGER, "0", Line: 3, Col: 15>
+    <RIGHT_PAREN, ")", Line: 3, Col: 16>
+    <LEFT_BRACE, "{", Line: 3, Col: 18>
+    <CONDITION, "condition", Line: 4, Col: 9>
+    <LEFT_PAREN, "(", Line: 4, Col: 19>
+    <IDENTIFIER, "X", Line: 4, Col: 20>
+    <GREATER_EQUAL, ">=", Line: 4, Col: 22>
+    <INTEGER, "5", Line: 4, Col: 25>
+    <LOGICAL_AND, "&&", Line: 4, Col: 27>
+    <IDENTIFIER, "X", Line: 4, Col: 30>
+    <NOT_EQUAL, "!=", Line: 4, Col: 32>
+    <INTEGER, "7", Line: 4, Col: 35>
+    <RIGHT_PAREN, ")", Line: 4, Col: 36>
+    <LEFT_BRACE, "{", Line: 4, Col: 38>
+    <OUTPUT, "output", Line: 5, Col: 13>
+    <LEFT_PAREN, "(", Line: 5, Col: 19>
+    <STRING, ""Midpoint"", Line: 5, Col: 20>
+    <RIGHT_PAREN, ")", Line: 5, Col: 30>
+    <SEMICOLON, ";", Line: 5, Col: 31>
+    <IDENTIFIER, "X", Line: 6, Col: 13>
+    <DEC, "--", Line: 6, Col: 14>
+    <SEMICOLON, ";", Line: 6, Col: 16>
+    <RIGHT_BRACE, "}", Line: 7, Col: 9>
+    <ELSE, "else", Line: 7, Col: 11>
+    <LEFT_BRACE, "{", Line: 7, Col: 16>
+    <IDENTIFIER, "X", Line: 8, Col: 13>
+    <ASSIGN, "=", Line: 8, Col: 15>
+    <IDENTIFIER, "X", Line: 8, Col: 17>
+    <EXP, "**", Line: 8, Col: 19>
+    <INTEGER, "2", Line: 8, Col: 22>
+    <SEMICOLON, ";", Line: 8, Col: 23>
+    <BREAK, "break", Line: 9, Col: 13>
+    <SEMICOLON, ";", Line: 9, Col: 18>
+    <RIGHT_BRACE, "}", Line: 10, Col: 9>
+    <RIGHT_BRACE, "}", Line: 11, Col: 5>
+    <RIGHT_BRACE, "}", Line: 12, Col: 1>
+    <FINISH, "finish", Line: 13, Col: 1>
+
+test/test4.bili
+
+    --- Running Manual Scanner ---
+    <START, "start", Line: 1, Col: 1>
+    <LEFT_BRACE, "{", Line: 1, Col: 7>
+    <DECLARE, "declare", Line: 2, Col: 1>
+    <IDENTIFIER, "FLOAT", Line: 2, Col: 9>
+    <IDENTIFIER, "Sci", Line: 2, Col: 15>
+    <ASSIGN, "=", Line: 2, Col: 19>
+    <FLOAT, "+5.5e-10", Line: 2, Col: 21>
+    <SEMICOLON, ";", Line: 2, Col: 29>
+    <DECLARE, "declare", Line: 3, Col: 1>
+    <IDENTIFIER, "STRING", Line: 3, Col: 9>
+    <IDENTIFIER, "Path", Line: 3, Col: 16>
+    <ASSIGN, "=", Line: 3, Col: 21>
+    <STRING, ""C:\\Users\\Guest"", Line: 3, Col: 23>
+    <SEMICOLON, ";", Line: 3, Col: 41>
+    <DECLARE, "declare", Line: 4, Col: 1>
+    <IDENTIFIER, "CHAR", Line: 4, Col: 9>
+    <IDENTIFIER, "Grade", Line: 4, Col: 14>
+    <ASSIGN, "=", Line: 4, Col: 20>
+    <CHARACTER, "'A'", Line: 4, Col: 22>
+    <SEMICOLON, ";", Line: 4, Col: 25>
+    <DECLARE, "declare", Line: 5, Col: 1>
+    <IDENTIFIER, "BOOLEAN", Line: 5, Col: 9>
+    <IDENTIFIER, "Flag", Line: 5, Col: 17>
+    <ASSIGN, "=", Line: 5, Col: 22>
+    <BOOLEAN, "false", Line: 5, Col: 24>
+    <SEMICOLON, ";", Line: 5, Col: 29>
+    <IDENTIFIER, "Sci", Line: 7, Col: 1>
+    <ASSIGN, "=", Line: 7, Col: 5>
+    <IDENTIFIER, "Sci", Line: 7, Col: 7>
+    <MUL, "*", Line: 7, Col: 11>
+    <FLOAT, "10.0", Line: 7, Col: 13>
+    <ADD, "+", Line: 7, Col: 18>
+    <INTEGER, "100", Line: 7, Col: 20>
+    <SEMICOLON, ";", Line: 7, Col: 23>
+    <RIGHT_BRACE, "}", Line: 8, Col: 1>
+    <FINISH, "finish", Line: 9, Col: 1>
+
+    --- Running JFlex Lexer ---
+    <START, "start", Line: 1, Col: 1>
+    <LEFT_BRACE, "{", Line: 1, Col: 7>
+    <DECLARE, "declare", Line: 2, Col: 5>
+    <IDENTIFIER, "FLOAT", Line: 2, Col: 13>
+    <IDENTIFIER, "Sci", Line: 2, Col: 19>
+    <ASSIGN, "=", Line: 2, Col: 23>
+    <FLOAT, "+5.5e-10", Line: 2, Col: 25>
+    <SEMICOLON, ";", Line: 2, Col: 33>
+    <DECLARE, "declare", Line: 3, Col: 5>
+    <IDENTIFIER, "STRING", Line: 3, Col: 13>
+    <IDENTIFIER, "Path", Line: 3, Col: 20>
+    <ASSIGN, "=", Line: 3, Col: 25>
+    <STRING, ""C:\\Users\\Guest"", Line: 3, Col: 27>
+    <SEMICOLON, ";", Line: 3, Col: 45>
+    <DECLARE, "declare", Line: 4, Col: 5>
+    <IDENTIFIER, "CHAR", Line: 4, Col: 13>
+    <IDENTIFIER, "Grade", Line: 4, Col: 18>
+    <ASSIGN, "=", Line: 4, Col: 24>
+    <CHARACTER, "'A'", Line: 4, Col: 26>
+    <SEMICOLON, ";", Line: 4, Col: 29>
+    <DECLARE, "declare", Line: 5, Col: 5>
+    <IDENTIFIER, "BOOLEAN", Line: 5, Col: 13>
+    <IDENTIFIER, "Flag", Line: 5, Col: 21>
+    <ASSIGN, "=", Line: 5, Col: 26>
+    <BOOLEAN, "false", Line: 5, Col: 28>
+    <SEMICOLON, ";", Line: 5, Col: 33>
+    <IDENTIFIER, "Sci", Line: 8, Col: 5>
+    <ASSIGN, "=", Line: 8, Col: 9>
+    <IDENTIFIER, "Sci", Line: 8, Col: 11>
+    <MUL, "*", Line: 8, Col: 15>
+    <FLOAT, "10.0", Line: 8, Col: 17>
+    <ADD, "+", Line: 8, Col: 22>
+    <INTEGER, "100", Line: 8, Col: 24>
+    <SEMICOLON, ";", Line: 8, Col: 27>
+    <RIGHT_BRACE, "}", Line: 9, Col: 1>
+    <FINISH, "finish", Line: 10, Col: 1>
+
+test/test5.bili
+
+    --- Running Manual Scanner ---
+    <START, "start", Line: 1, Col: 1>
+    <LEFT_BRACE, "{", Line: 1, Col: 7>
+    <DECLARE, "declare", Line: 2, Col: 1>
+    <IDENTIFIER, "INT", Line: 2, Col: 9>
+    <INTEGER, "123", Line: 2, Col: 13>
+    <IDENTIFIER, "Invalid", Line: 2, Col: 16>
+    <ASSIGN, "=", Line: 2, Col: 24>
+    <INTEGER, "10", Line: 2, Col: 26>
+    <SEMICOLON, ";", Line: 2, Col: 28>
+    <DECLARE, "declare", Line: 3, Col: 1>
+    <IDENTIFIER, "FLOAT", Line: 3, Col: 9>
+    <IDENTIFIER, "Bad", Line: 3, Col: 15>
+    <ASSIGN, "=", Line: 3, Col: 19>
+    [ERROR] Type: ERROR | Line: 3, Col: 21 | Lexeme: '1.2.3.4' | Reason: Malformed numeric literal (multiple decimal points)
+    <SEMICOLON, ";", Line: 3, Col: 28>
+    <IDENTIFIER, "ValidVar", Line: 4, Col: 1>
+    <ASSIGN, "=", Line: 4, Col: 10>
+    <INTEGER, "50", Line: 4, Col: 12>
+    <SEMICOLON, ";", Line: 4, Col: 14>
+    [ERROR] Type: ERROR | Line: 5, Col: 1 | Lexeme: '$' | Reason: Invalid token
+    [ERROR] Type: ERROR | Line: 5, Col: 2 | Lexeme: '#' | Reason: Invalid token
+    [ERROR] Type: ERROR | Line: 5, Col: 3 | Lexeme: '@' | Reason: Invalid token
+    <LOGICAL_NOT, "!", Line: 5, Col: 4>
+    <DECLARE, "declare", Line: 6, Col: 1>
+    <IDENTIFIER, "STRING", Line: 6, Col: 9>
+    <IDENTIFIER, "CutOff", Line: 6, Col: 16>
+    <ASSIGN, "=", Line: 6, Col: 23>
+    ' | Reason: Unterminated string literal| Lexeme: '"Oops  ## Error: Unterminated
+    <RIGHT_BRACE, "}", Line: 7, Col: 1>
+    <FINISH, "finish", Line: 8, Col: 1>
+
+    --- Running JFlex Lexer ---
+    <START, "start", Line: 1, Col: 1>
+    <LEFT_BRACE, "{", Line: 1, Col: 7>
+    <DECLARE, "declare", Line: 2, Col: 5>
+    <IDENTIFIER, "INT", Line: 2, Col: 13>
+    <INTEGER, "123", Line: 2, Col: 17>
+    <IDENTIFIER, "Invalid", Line: 2, Col: 20>
+    <ASSIGN, "=", Line: 2, Col: 28>
+    <INTEGER, "10", Line: 2, Col: 30>
+    <SEMICOLON, ";", Line: 2, Col: 32>
+    <DECLARE, "declare", Line: 3, Col: 5>
+    <IDENTIFIER, "FLOAT", Line: 3, Col: 13>
+    <IDENTIFIER, "Bad", Line: 3, Col: 19>
+    <ASSIGN, "=", Line: 3, Col: 23>
+    [ERROR] Type: ERROR | Line: 3, Col: 25 | Lexeme: '1.2.3.4' | Reason: Malformed numeric literal (multiple decimal points)
+    <SEMICOLON, ";", Line: 3, Col: 32>
+    <IDENTIFIER, "ValidVar", Line: 5, Col: 5>
+    <ASSIGN, "=", Line: 5, Col: 14>
+    <INTEGER, "50", Line: 5, Col: 16>
+    <SEMICOLON, ";", Line: 5, Col: 18>
+    [ERROR] Type: ERROR | Line: 7, Col: 5 | Lexeme: '$' | Reason: Invalid token
+    [ERROR] Type: ERROR | Line: 7, Col: 6 | Lexeme: '#' | Reason: Invalid token
+    [ERROR] Type: ERROR | Line: 7, Col: 7 | Lexeme: '@' | Reason: Invalid token
+    <LOGICAL_NOT, "!", Line: 7, Col: 8>
+    <DECLARE, "declare", Line: 9, Col: 5>
+    <IDENTIFIER, "STRING", Line: 9, Col: 13>
+    <IDENTIFIER, "CutOff", Line: 9, Col: 20>
+    <ASSIGN, "=", Line: 9, Col: 27>
+    ' | Reason: Unterminated string literal| Lexeme: '"Oops  ## Error: Unterminated
+    <RIGHT_BRACE, "}", Line: 10, Col: 1>
+    <FINISH, "finish", Line: 11, Col: 1>
