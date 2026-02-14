@@ -27,6 +27,7 @@ public class Token {
     public String getLexeme() { return lexeme; }
     public int getLine() { return line; }
     public int getColumn() { return column; }
+    public String getReason() { return reason; }
 
     @Override
     public String toString() {

@@ -30,7 +30,9 @@ public class ManualScanner {
     private String preprocess(String input) {
         StringBuilder out = new StringBuilder();
 
-        boolean inString = false;
+        // Track single-quoted strings and multiline strings separately
+        boolean inString = false;           // for "..."
+        boolean inMultiLineString = false;     // for """..."""
         boolean inChar = false;
         boolean inSingleLineComment = false; // ##
         boolean inMultiLineComment = false;  // #* ... *#
@@ -40,7 +42,7 @@ public class ManualScanner {
         while (i < input.length()) {
             char c = input.charAt(i);
 
-            if (!inString && !inChar && !inSingleLineComment && !inMultiLineComment) {
+            if (!inString && !inMultiLineString && !inChar && !inSingleLineComment && !inMultiLineComment) {
                 if (c == '#' && (i + 1) < input.length()) {
                     char n = input.charAt(i + 1);
                     if (n == '#') { // single-line comment start
@@ -87,21 +89,48 @@ public class ManualScanner {
 
             // toggle whether in string/char literal
             if (!inChar && c == '"') {
+                // Detect triple quote start if not already in a string
+                if (!inString && !inMultiLineString && (i + 2) < input.length()
+                        && input.charAt(i + 1) == '"' && input.charAt(i + 2) == '"') {
+                    inMultiLineString = true;
+                    out.append('"').append('"').append('"');
+                    i += 3;
+                    lineHasContent = true;
+                    continue;
+                }
+                // If inside triple string, check for closing """
+                if (inMultiLineString) {
+                    // We saw one '"', check next two
+                    if ((i + 2) < input.length() && input.charAt(i + 1) == '"' && input.charAt(i + 2) == '"') {
+                        out.append('"').append('"').append('"');
+                        i += 3;
+                        inMultiLineString = false;
+                        lineHasContent = true;
+                        continue;
+                    } else {
+                        // Just a single quote inside multiline string
+                        out.append(c);
+                        i++;
+                        lineHasContent = true;
+                        continue;
+                    }
+                }
+                // Single-quoted string toggle
                 inString = !inString;
                 out.append(c);
                 lineHasContent = true;
                 i++;
                 continue;
             }
-            if (!inString && c == '\'') {
+            if (!inString && !inMultiLineString && c == '\'') {
                 inChar = !inChar;
                 out.append(c);
                 lineHasContent = true;
                 i++;
                 continue;
             }
-            // no whitespace removal in str and char literal
-            if (inString || inChar) {
+            // no whitespace removal in str and char literal (including triple string)
+            if (inString || inMultiLineString || inChar) {
                 if (c == '\\') {
                     out.append(c);
                     if (i + 1 < input.length()) {
@@ -116,6 +145,7 @@ public class ManualScanner {
                 out.append(c);
                 if (inChar && c == '\'') inChar = false;
                 if (inString && c == '"') inString = false;
+                // For triple string, closing handled above when encountering """
                 if (c == '\n') {
                     // newline inside literal remains; reset content tracker for next line
                     lineHasContent = false;
@@ -165,8 +195,6 @@ public class ManualScanner {
     }
 
     // scan the input char by char
-    // i think we need to remove comments ??
-    // does that mean just dont add to token list or is that for preprocess?
     public List<Token> scanTokens() {
 
         while (!endOfSource()) {
@@ -449,7 +477,6 @@ public class ManualScanner {
         return errorToken(text, startLine, startCol, "Invalid identifier (must start with Uppercase or be a keyword)");
     }
 
-
     //  INTEGER & FLOAT
     private Token scanNumber(char firstChar, int startLine, int startCol) {
         StringBuilder lexeme = new StringBuilder();
@@ -523,34 +550,128 @@ public class ManualScanner {
     }
 
     private Token scanString(int startLine, int startCol) {
+        // We have already consumed one '"' in scanToken
         StringBuilder lexeme = new StringBuilder("\"");
 
-        while (peek() != '"' && !endOfSource() && peek() != '\n') {
-            char c = peek();
-            // if \ encountered, enter escape sequence branch
-            if (c == '\\') {
-                advance();
-                lexeme.append('\\');
-                char escaped = peek();
-                if (escaped == '"' || escaped == '\\' || escaped == 'n' ||
-                    escaped == 't' || escaped == 'r') {
+        boolean isMultiLine = false;
+        // Detect multiline start: next two are quotes
+        if (peek() == '"' && peekNext() == '"') {
+            // consume two quotes to complete opening """
+            lexeme.append(advance());
+            lexeme.append(advance());
+            isMultiLine = true;
+        }
+
+        if (isMultiLine) {
+            while (!endOfSource()) {
+                if (peek() == '"' && peekNext() == '"') {
+                    // consume three quotes
                     lexeme.append(advance());
-                } else {
-                    return errorToken(lexeme.toString(), startLine, startCol, "Invalid escape sequence in string literal");
+                    lexeme.append(advance());
+                    if (peek() == '"') {
+                        lexeme.append(advance());
+                        return new Token(TokenType.STRING, lexeme.toString(), startLine, startCol);
+                    } else {
+                        return errorToken(lexeme.toString(), startLine, startCol, "Unterminated multiline string literal");
+                    }
                 }
-            } else {
+                char c = advance();
+                lexeme.append(c);
+                if (c == '\\') {
+                    // escapes inside multline strings
+                    if (endOfSource()) break;
+                    char esc = peek();
+                    if (esc == 'u') {
+                        lexeme.append(advance());
+                        // \\uXXXX (4 hex digits required)
+                        for (int i = 0; i < 4; i++) {
+                            if (endOfSource() || !isHexDigit(peek())) {
+                                // consume rest of multiline string until closing """ or EOF
+                                consumeRestOfString(true,lexeme);
+                                return errorToken(lexeme.toString(), startLine, startCol, "Invalid Unicode escape in string literal");
+                            }
+                            lexeme.append(advance());
+                        }
+                    } else if (esc == 'n' || esc == 't' || esc == 'r' || esc == '\\' || esc == '"') {
+                        lexeme.append(advance());
+                    } else {
+                        // consume rest of multiline string until closing """ or EOF
+                        consumeRestOfString(true,lexeme);
+                        return errorToken(lexeme.toString(), startLine, startCol, "Invalid escape sequence in string literal");
+                    }
+                }
+            }
+            // EOF reached without closing
+            return errorToken(lexeme.toString(), startLine, startCol, "Unterminated multiline string literal");
+        } else {
+            // Single-line string: stop at closing quote or newline/EOF
+            while (!endOfSource() && peek() != '"' && peek() != '\n') {
+                char c = advance();
+                if (c == '\\') {
+                    // escape handling
+                    char esc = peek();
+                    if (esc == 'u') {
+                        lexeme.append('\\').append(advance());
+                        // \\uXXXX (4 hex digits required)
+                        for (int i = 0; i < 4; i++) {
+                            if (endOfSource() || !isHexDigit(peek())) {
+                                consumeRestOfString(false,lexeme);
+                                return errorToken(lexeme.toString(), startLine, startCol, "Invalid Unicode escape in string literal");
+                            }
+                            lexeme.append(advance());
+                        }
+                        continue;
+                    } else if (esc == 'n' || esc == 't' || esc == 'r' || esc == '\\' || esc == '"') {
+                        lexeme.append('\\').append(advance());
+                        continue;
+                    } else {
+                        // invalid escape
+                        lexeme.append(c); // '\\'
+                        // consume rest of string until closing quote or newline
+                        consumeRestOfString(false,lexeme);
+                        return errorToken(lexeme.toString(), startLine, startCol, "Invalid escape sequence in string literal");
+                    }
+                }
+                lexeme.append(c);
+            }
+            if (endOfSource() || peek() == '\n') {
+                return errorToken(lexeme.toString(), startLine, startCol, "Unterminated string literal");
+            }
+            // consume closing '"'
+            lexeme.append(advance());
+            return new Token(TokenType.STRING, lexeme.toString(), startLine, startCol);
+        }
+    }
+
+    private boolean isHexDigit(char c) {
+        return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+    }
+
+    // helper to consume rest of string on string related error
+    private void consumeRestOfString(boolean isMultiLine, StringBuilder lexeme) {
+        if (isMultiLine) {
+            // consume rest of multiline string until closing """ or EOF
+            while (!endOfSource()) {
+                if (peek() == '"' && peekNext() == '"') {
+                    lexeme.append(advance());
+                    lexeme.append(advance()); // consume first two quotes
+                    if (!endOfSource() && peek() == '"') {
+                        lexeme.append(advance()); // consume third quote
+                        break;
+                    }
+                } else {
+                    lexeme.append(advance());
+                }
+            }
+        } else {
+            // consume rest of string until closing quote or newline
+            while (!endOfSource() && peek() != '"' && peek() != '\n') {
                 lexeme.append(advance());
             }
+            if (!endOfSource() && peek() == '"') {
+                lexeme.append(advance()); // consume closing quote
+            }
         }
-        // unclosed string literal (across lines or at end of file)
-        if (endOfSource() || peek() == '\n') {
-            return errorToken(lexeme.toString(), startLine, startCol, "Unterminated string literal");
-        }
-
-        advance();
-        lexeme.append('"');
-
-        return new Token(TokenType.STRING, lexeme.toString(), startLine, startCol);
     }
 
     private Token scanCharacter(int startLine, int startCol) {
