@@ -1,10 +1,13 @@
-start {
-    declare FLOAT Sci = +5.5e-10;
-    declare STRING Path = "C:\\Users\\Guest";
-    declare CHAR Grade = 'A';
-    declare BOOLEAN Flag = false;
+start
 
-    ## Mixed arithmetic with different literal formats
-    Sci = Sci * 10.0 + 100;
-}
+declare lowercase = 10;        ## invalid identifier (starts lowercase)
+declare TooLongIdentifierNameThatExceedsThirtyOneCharacters = 5;
+
+declare WrongFloat = 12.3.4;
+
+declare BadString = "Unclosed string
+
+#* Unclosed multi-line comment
+@
+
 finish

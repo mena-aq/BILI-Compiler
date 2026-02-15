@@ -1,8 +1,19 @@
-#* Block Comment *#
-start {
-    Alpha = Beta ** 2.5;
-    ## Test Errors
-    badVar = "Unclosed String;
-    BigIdentifierIsActuallyTooLongToBeValidHere = 10.5.2;
+start
+
+declare A = 10;
+declare B = 20;
+declare C = 5;
+declare Result = 0;
+
+Result = (A + B) * C - 5 / 2 % 3;
+
+Result += A * (B - C) ** 2;
+
+IF (A > B || B <= C && A != C) {
+    Result = Result + 1;
 }
+else {
+    Result = Result - 1;
+}
+
 finish

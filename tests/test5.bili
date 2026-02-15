@@ -1,11 +1,10 @@
-start {
-    declare INT 123Invalid = 10;   ## Error: Starts with number
-    declare FLOAT Bad = 1.2.3.4;   ## Error: Too many dots
+start
 
-    ValidVar = 50;                 ## Valid
+## This is a single line comment
+declare X = 10;  ## comment after code
+#*
+   This is a multi-line comment
+   It should be ignored completely
+*#
 
-    $#@!                           ## Error: Unknown symbols
-
-    declare STRING CutOff = "Oops  ## Error: Unterminated
-}
 finish
