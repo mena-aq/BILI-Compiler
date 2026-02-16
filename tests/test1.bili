@@ -1,42 +1,42 @@
-#* BLOCK COMMENT TEST: 
-   This should be recognized as a single COMMENT token.
-*#z
+start
+declare X = 10;
+declare Y = -25;
+declare Z = +100;
+declare F = 3.14;
+declare G = -2.5e10;
+declare H = +6.022e23;
 
-start {
-    /* Valid Declarations */
-    declare INT Alpha = 100;
-    declare FLOAT Beta = 3.1415;
-    declare STRING Greeting = "Hello, Lexer!";
-    declare BOOLEAN IsActive = true;
+declare FLAG = true;
+declare DONE = false;
 
-    ## Error 1: Invalid Identifier (Starts with lowercase)
-    declare INT count = 5; 
+declare STR = "Hello World";
+declare ESC = "Line\nTab\tQuote\"Backslash\\";
+declare CH1 = 'a';
+declare CH2 = '\n';
+declare CH3 = '\\';
 
-    ## Error 2: Malformed Float (Multiple decimals)
-    declare FLOAT BadNum = 10.5.2;
+X++;
+Y--;
+X += 5;
+Y -= 3;
+X *= 2;
+Y /= 4;
 
-    ## Error 3: Identifier Too Long (Exceeds 31 chars)
-    declare INT ThisIsAVeryLongIdentifierThatShouldExceedTheLimit = 99;
-
-    ## Error 4: Unterminated String
-    declare STRING Broken = "Forgot to close this;
-
-    /* Testing Multi-character Operators */
-    Alpha = Alpha ** 2;    ## Power
-    Alpha += 10;           ## Add-assign
-    
-    condition (Alpha >= 100 && IsActive == true) {
-        output("Success");
-    } else {
-        loop (Alpha > 0) {
-            Alpha--;
-            break;
-        }
-    }
-
-    ## Error 5: Unclosed Multi-line Comment
-    #* This comment never ends...
-    
-    return 0;
+IF(X >= Y && FLAG || !DONE) {
+    output(X);
 }
+else {
+    input(Y);
+}
+
+loop (X < 100) {
+    X = X + 1;
+    continue;
+    break;
+}
+
+function MyFunc() {
+    return X ** 2;
+}
+
 finish

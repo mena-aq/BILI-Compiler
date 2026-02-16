@@ -21,7 +21,7 @@ SingleComment  = "##" [^\n]*
 MultiComment   = "#*" ([^*] | "*"+ [^*#])* "*"+ "#"
 
 /* Identifiers */
-Identifier     = [A-Z][a-zA-Z0-9_]{0,30}
+Identifier     = [A-Z][a-z0-9_]{0,30}
 
 /* Literals */
 IntegerLiteral = [+-]?[0-9]+

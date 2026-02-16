@@ -8,12 +8,16 @@ public class ErrorHandler {
     }
 
     // handle error with a reason
-    public static void handleError(Token token, String reason) {
-        report(token.getType(), token.getLine(), token.getColumn(), token.getLexeme(), reason);
+    public static void handleError(Token token) {
+        if (token.getReason()!= null) {
+            report(token.getType(), token.getLine(), token.getColumn(), token.getLexeme(), token.getReason());
+        } else {
+            handleErrorInferReason(token);
+        }
     }
 
     // if no reason provided try to infer reason based on lexeme pattern
-    public static void handleError(Token token) {
+    public static void handleErrorInferReason(Token token) {
         String lexeme = token.getLexeme();
         String reason = "Invalid token";
 
