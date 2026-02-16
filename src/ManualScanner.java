@@ -445,7 +445,7 @@ public class ManualScanner {
         lexeme.append(firstChar);
 
         // consume all valid identifier/keyword characters (letters, digits, underscores)
-        while (!endOfSource() && (isAlpha(peek()) || isDigit(peek()) || peek() == '_')) {
+        while (!endOfSource() && ((isAlpha(peek()) && Character.isLowerCase(peek())) || isDigit(peek()) || peek() == '_')) {
             lexeme.append(advance());
         }
         String text = lexeme.toString();

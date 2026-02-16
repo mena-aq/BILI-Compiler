@@ -1,10 +1,5 @@
 start{
-    ValidUnicode = "Greek omega: \u03A9";
-    InvalidTooShort = "Bad unicode: \u12G";
-    InvalidTooLong = "Bad unicode: \u12345";
-    InvalidChar = "Bad unicode: \u12G4";
-    MultilineValid = """
-        Valid: \u03A9
-        Invalid: \u12
-    """;
+    ALLCAPS = 42;
+    _not_valid = 5;
+    99invalid = 10;
 }finish
