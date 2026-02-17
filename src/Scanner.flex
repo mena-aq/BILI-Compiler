@@ -1,5 +1,9 @@
+/* --- Section 1: User Code --- */
+import java.util.*;
+
 %%
 
+/* --- Section 2: Options and Declarations --- */
 %class Lexer
 %public
 %unicode
@@ -10,6 +14,10 @@
 %{
     private Token createToken(TokenType type) {
         return new Token(type, yytext(), yyline + 1, yycolumn + 1);
+    }
+
+    private Token createError(String reason) {
+        return new Token(TokenType.ERROR, yytext(), yyline + 1, yycolumn + 1, reason);
     }
 %}
 
@@ -23,44 +31,35 @@ MultiComment   = "#*" ([^*] | "*"+ [^*#])* "*"+ "#"
 /* Identifiers */
 Identifier     = [A-Z][a-z0-9_]{0,30}
 
-/* Literals */
-IntegerLiteral = [+-]?[0-9]+
-FloatLiteral   = [+-]?[0-9]+\.[0-9]{1,6}([eE][+-]?[0-9]+)?
-StringLiteral  = \"([^\"\\\n]|\\[\\\"ntr])*\"
-CharLiteral    = \'([^\'\\\n]|\\[\\\'ntr])\'
+/* Literals & Unicode Macros */
+IntegerLiteral    = [+-]?[0-9]+
+FloatLiteral      = [+-]?[0-9]+\.[0-9]{1,6}([eE][+-]?[0-9]+)?
 
+/* Unicode and Escape Sequences */
+UnicodeEscape     = \\u[0-9a-fA-F]{4}
+InvalidEscape     = \\[^ntr\\\"u]
+IncompleteUnicode = \\u[0-9a-fA-F]{0,3}
+
+/* String/Char elements */
+StringElement     = [^\"\\\n] | \\[\\\"ntr] | {UnicodeEscape}
+// For multiline, we allow newlines but not unescaped backslashes or invalid unicode
+MultiStringElement = [^\"\\] | \"[^\"] | \"\"[^\"] | \\[\\\"ntr] | {UnicodeEscape} | \n
+CharElement       = [^\'\\\n] | \\[\\\'ntr] | {UnicodeEscape}
+
+/* Final Literal Definitions */
+StringLiteral      = \" {StringElement}* \"
+MultilineString    = \"\"\" {MultiStringElement}* \"\"\"
+CharLiteral        = \' {CharElement} \'
+
+/* --- Section 3: Lexical Rules --- */
 %%
 
-{MultiComment}      { /* skip or return COMMENT if needed */ }
-{SingleComment}     { /* skip or return COMMENT if needed */ }
+/* 1. Comments and Whitespace */
+{Whitespace}        { /* skip */ }
+{MultiComment}      { /* skip */ }
+{SingleComment}     { /* skip */ }
 
-/* Keywords */
-"start"             { return createToken(TokenType.START); }
-"finish"            { return createToken(TokenType.FINISH); }
-"loop"              { return createToken(TokenType.LOOP); }
-"condition"         { return createToken(TokenType.CONDITION); }
-"declare"           { return createToken(TokenType.DECLARE); }
-"output"            { return createToken(TokenType.OUTPUT); }
-"input"             { return createToken(TokenType.INPUT); }
-"function"          { return createToken(TokenType.FUNCTION); }
-"return"            { return createToken(TokenType.RETURN); }
-"break"             { return createToken(TokenType.BREAK); }
-"continue"          { return createToken(TokenType.CONTINUE); }
-"else"              { return createToken(TokenType.ELSE); }
-
-/* Boolean */
-"true" | "false"    { return createToken(TokenType.BOOLEAN); }
-
-/* Identifier */
-{Identifier}        { return createToken(TokenType.IDENTIFIER); }
-
-/* Literals */
-{FloatLiteral}      { return createToken(TokenType.FLOAT); }
-{IntegerLiteral}    { return createToken(TokenType.INTEGER); }
-{StringLiteral}     { return createToken(TokenType.STRING); }
-{CharLiteral}       { return createToken(TokenType.CHARACTER); }
-
-/* Multi-character operators */
+/* 2. Multi-character operators (Rule 3.12 Priority) */
 "**"                { return createToken(TokenType.EXP); }
 "=="                { return createToken(TokenType.EQUAL); }
 "!="                { return createToken(TokenType.NOT_EQUAL); }
@@ -75,7 +74,30 @@ CharLiteral    = \'([^\'\\\n]|\\[\\\'ntr])\'
 "*="                { return createToken(TokenType.MUL_ASSIGN); }
 "/="                { return createToken(TokenType.DIV_ASSIGN); }
 
-/* Single-character operators */
+/* 3. Keywords & Booleans */
+"start"             { return createToken(TokenType.START); }
+"finish"            { return createToken(TokenType.FINISH); }
+"loop"              { return createToken(TokenType.LOOP); }
+"condition"         { return createToken(TokenType.CONDITION); }
+"declare"           { return createToken(TokenType.DECLARE); }
+"output"            { return createToken(TokenType.OUTPUT); }
+"input"             { return createToken(TokenType.INPUT); }
+"function"          { return createToken(TokenType.FUNCTION); }
+"return"            { return createToken(TokenType.RETURN); }
+"break"             { return createToken(TokenType.BREAK); }
+"continue"          { return createToken(TokenType.CONTINUE); }
+"else"              { return createToken(TokenType.ELSE); }
+"true" | "false"    { return createToken(TokenType.BOOLEAN); }
+
+/* 4. Valid Literals & Identifiers */
+{FloatLiteral}      { return createToken(TokenType.FLOAT); }
+{IntegerLiteral}    { return createToken(TokenType.INTEGER); }
+{MultilineString}   { return createToken(TokenType.STRING); }
+{StringLiteral}     { return createToken(TokenType.STRING); }
+{CharLiteral}       { return createToken(TokenType.CHARACTER); }
+{Identifier}        { return createToken(TokenType.IDENTIFIER); }
+
+/* 5. Single-character operators & Punctuators */
 "+"                 { return createToken(TokenType.ADD); }
 "-"                 { return createToken(TokenType.SUB); }
 "*"                 { return createToken(TokenType.MUL); }
@@ -85,8 +107,6 @@ CharLiteral    = \'([^\'\\\n]|\\[\\\'ntr])\'
 ">"                 { return createToken(TokenType.GREATER_THAN); }
 "="                 { return createToken(TokenType.ASSIGN); }
 "!"                 { return createToken(TokenType.LOGICAL_NOT); }
-
-/* Punctuators */
 "("                 { return createToken(TokenType.LEFT_PAREN); }
 ")"                 { return createToken(TokenType.RIGHT_PAREN); }
 "{"                 { return createToken(TokenType.LEFT_BRACE); }
@@ -97,27 +117,34 @@ CharLiteral    = \'([^\'\\\n]|\\[\\\'ntr])\'
 ";"                 { return createToken(TokenType.SEMICOLON); }
 ":"                 { return createToken(TokenType.COLON); }
 
-/* Whitespace */
-{Whitespace}        { /* skip */ }
-/* --- Specific Error Rules --- */
+/* --- Section 4: Specific Error Rules --- */
 
-/* Unclosed Multi-line Comment */
-"#*" ([^*] | "*"+ [^*#])* { return createToken(TokenType.ERROR); }
+/* ERROR: Multiline String with Invalid Escape */
+\"\"\"({MultiStringElement} | {InvalidEscape} | {IncompleteUnicode})* \"\"\" {
+    return createError("Invalid Unicode escape in string literal");
+}
 
-/* Unterminated String */
-\"([^\"\\\n]|\\[\\\"ntr])* { return createToken(TokenType.ERROR); }
+/* ERROR: Single line String with Invalid Escape */
+\"({StringElement} | {InvalidEscape} | {IncompleteUnicode})* \" {
+    return createError("Invalid Unicode escape in string literal");
+}
 
-/* Malformed Float (Multiple decimals or trailing dots) */
-[0-9]+\.[0-9]*\.[0-9\.]+   { return createToken(TokenType.ERROR); }
+/* ERROR: Unterminated Multiline String */
+\"\"\"({MultiStringElement} | {InvalidEscape} | {IncompleteUnicode})* {
+    return createError("Unterminated string literal");
+}
 
-/* Invalid Identifier (Starting with lowercase) */
-[a-z][a-zA-Z0-9_]* { return createToken(TokenType.ERROR); }
+/* ERROR: Unterminated Single line String */
+\"({StringElement} | {InvalidEscape} | {IncompleteUnicode})* {
+    return createError("Unterminated string literal");
+}
 
-/* Identifier Too Long (More than 31 chars) */
-/* Identifier Too Long (Matches 32 or more characters) */
-[A-Z][a-zA-Z0-9_]{31} [a-zA-Z0-9_]+ { return createToken(TokenType.ERROR); }
+/* Other Errors */
+"#*" ([^*] | "*"+ [^*#])* { return createError("Unclosed multi-line comment"); }
+[0-9]+\.[0-9]*\.[0-9\.]+   { return createError("Malformed float"); }
+[a-z][a-zA-Z0-9_]* { return createError("Invalid identifier (must start with Uppercase)"); }
+[A-Z][a-zA-Z0-9_]{31} [a-zA-Z0-9_]+ { return createError("Identifier exceeds max length (31)"); }
 
-/* Invalid Characters (Catch-all) */
-[^]                        { return createToken(TokenType.ERROR); }
-
+/* Catch-all */
+[^]                        { return createError("Invalid character"); }
 <<EOF>>                    { return createToken(TokenType.EOF); }

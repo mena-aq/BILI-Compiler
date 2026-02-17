@@ -616,7 +616,7 @@ public class ManualScanner {
                         for (int i = 0; i < 4; i++) {
                             if (endOfSource() || !isHexDigit(peek())) {
                                 consumeRestOfString(false,lexeme);
-                                return errorToken(lexeme.toString(), startLine, startCol, "Invalid Unicode escape in string literal");
+                                return errorToken(lexeme.toString(), startLine, startCol, "Unterminated string literal");
                             }
                             lexeme.append(advance());
                         }
@@ -796,6 +796,6 @@ public class ManualScanner {
             System.out.println(token);
         }
 
-        //scanner.printStatistics();
+        scanner.printStatistics();
     }
 }

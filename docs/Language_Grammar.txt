@@ -1,0 +1,34 @@
+INTEGER
+
+S -> op integer | integer
+integer -> digit integer | digit
+op -> + | -
+digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+FLOATING POINT
+S -> op floating | floating
+floating -> integer . integer{1-6} | integer . integer{1-6} e op integer
+integer -> digit integer | digit
+op -> + | -
+digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+IDENTIFIER
+S -> uppercase identifier
+identifier -> identifier lowercase | identifier digit |  identifier underscore |null {0-30}
+underscore -> _
+uppercase -> A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+lowercase -> a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
+
+COMMENT
+S -> ## comment
+comment -> comment character | null
+character -> any character except \n
+
+BOOLEAN
+S -> true | false
+
+WHITESPACE
+S -> \t | \n | \r
+
+PUNCTUATOR
+S -> ( | ) | { | } | [ | ] | ; | , | :
