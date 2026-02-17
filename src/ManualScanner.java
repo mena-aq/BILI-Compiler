@@ -796,6 +796,6 @@ public class ManualScanner {
             System.out.println(token);
         }
 
-        //scanner.printStatistics();
+        scanner.printStatistics();
     }
 }
