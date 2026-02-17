@@ -456,64 +456,78 @@ test/test5.bili
 
     --- Running Manual Scanner ---
     <START, "start", Line: 1, Col: 1>
-    <LEFT_BRACE, "{", Line: 1, Col: 7>
-    <DECLARE, "declare", Line: 2, Col: 1>
-    <IDENTIFIER, "INT", Line: 2, Col: 9>
-    <INTEGER, "123", Line: 2, Col: 13>
-    <IDENTIFIER, "Invalid", Line: 2, Col: 16>
-    <ASSIGN, "=", Line: 2, Col: 24>
-    <INTEGER, "10", Line: 2, Col: 26>
-    <SEMICOLON, ";", Line: 2, Col: 28>
     <DECLARE, "declare", Line: 3, Col: 1>
-    <IDENTIFIER, "FLOAT", Line: 3, Col: 9>
-    <IDENTIFIER, "Bad", Line: 3, Col: 15>
-    <ASSIGN, "=", Line: 3, Col: 19>
-    [ERROR] Type: ERROR | Line: 3, Col: 21 | Lexeme: '1.2.3.4' | Reason: Malformed numeric literal (multiple decimal points)
-    <SEMICOLON, ";", Line: 3, Col: 28>
-    <IDENTIFIER, "ValidVar", Line: 4, Col: 1>
-    <ASSIGN, "=", Line: 4, Col: 10>
-    <INTEGER, "50", Line: 4, Col: 12>
-    <SEMICOLON, ";", Line: 4, Col: 14>
-    [ERROR] Type: ERROR | Line: 5, Col: 1 | Lexeme: '$' | Reason: Invalid token
-    [ERROR] Type: ERROR | Line: 5, Col: 2 | Lexeme: '#' | Reason: Invalid token
-    [ERROR] Type: ERROR | Line: 5, Col: 3 | Lexeme: '@' | Reason: Invalid token
-    <LOGICAL_NOT, "!", Line: 5, Col: 4>
-    <DECLARE, "declare", Line: 6, Col: 1>
-    <IDENTIFIER, "STRING", Line: 6, Col: 9>
-    <IDENTIFIER, "CutOff", Line: 6, Col: 16>
-    <ASSIGN, "=", Line: 6, Col: 23>
-    ' | Reason: Unterminated string literal| Lexeme: '"Oops  ## Error: Unterminated
-    <RIGHT_BRACE, "}", Line: 7, Col: 1>
-    <FINISH, "finish", Line: 8, Col: 1>
+    <IDENTIFIER, "X", Line: 3, Col: 9>
+    <ASSIGN, "=", Line: 3, Col: 11>
+    <INTEGER, "10", Line: 3, Col: 13>
+    <SEMICOLON, ";", Line: 3, Col: 15>
+    <IDENTIFIER, "Valid", Line: 7, Col: 3>
+    <IDENTIFIER, "Unicode", Line: 7, Col: 8>
+    <ASSIGN, "=", Line: 7, Col: 16>
+    <STRING, ""Greek omega: \u03A9"", Line: 7, Col: 18>
+    <SEMICOLON, ";", Line: 7, Col: 39>
+    <IDENTIFIER, "Invalid", Line: 8, Col: 1>
+    <IDENTIFIER, "Too", Line: 8, Col: 8>
+    <IDENTIFIER, "Short", Line: 8, Col: 11>
+    <ASSIGN, "=", Line: 8, Col: 17>
+    [ERROR] Type: ERROR | Line: 8, Col: 19 | Lexeme: '"Bad unicode: \u12G"' | Reason: Unterminated string literal
+    <SEMICOLON, ";", Line: 8, Col: 39>
+    <IDENTIFIER, "Invalid", Line: 9, Col: 1>
+    <IDENTIFIER, "Too", Line: 9, Col: 8>
+    <IDENTIFIER, "Long", Line: 9, Col: 11>
+    <ASSIGN, "=", Line: 9, Col: 16>
+    <STRING, ""Bad unicode: \u12345"", Line: 9, Col: 18>
+    <SEMICOLON, ";", Line: 9, Col: 40>
+    <IDENTIFIER, "Invalid", Line: 10, Col: 1>
+    <IDENTIFIER, "Char", Line: 10, Col: 8>
+    <ASSIGN, "=", Line: 10, Col: 13>
+    [ERROR] Type: ERROR | Line: 10, Col: 15 | Lexeme: '"Bad unicode: \u12G4"' | Reason: Unterminated string literal
+    <SEMICOLON, ";", Line: 10, Col: 36>
+    <IDENTIFIER, "Multiline", Line: 11, Col: 1>
+    <IDENTIFIER, "Valid", Line: 11, Col: 10>
+    <ASSIGN, "=", Line: 11, Col: 16>
+    [ERROR] Type: ERROR | Line: 11, Col: 18 | Lexeme: '"""
+            Valid: \u03A9
+            Invalid: \u12
+        """' | Reason: Invalid Unicode escape in string literal
+    <SEMICOLON, ";", Line: 14, Col: 8>
+    <FINISH, "finish", Line: 15, Col: 1>
 
     --- Running JFlex Lexer ---
     <START, "start", Line: 1, Col: 1>
-    <LEFT_BRACE, "{", Line: 1, Col: 7>
-    <DECLARE, "declare", Line: 2, Col: 5>
-    <IDENTIFIER, "INT", Line: 2, Col: 13>
-    <INTEGER, "123", Line: 2, Col: 17>
-    <IDENTIFIER, "Invalid", Line: 2, Col: 20>
-    <ASSIGN, "=", Line: 2, Col: 28>
-    <INTEGER, "10", Line: 2, Col: 30>
-    <SEMICOLON, ";", Line: 2, Col: 32>
-    <DECLARE, "declare", Line: 3, Col: 5>
-    <IDENTIFIER, "FLOAT", Line: 3, Col: 13>
-    <IDENTIFIER, "Bad", Line: 3, Col: 19>
-    <ASSIGN, "=", Line: 3, Col: 23>
-    [ERROR] Type: ERROR | Line: 3, Col: 25 | Lexeme: '1.2.3.4' | Reason: Malformed numeric literal (multiple decimal points)
-    <SEMICOLON, ";", Line: 3, Col: 32>
-    <IDENTIFIER, "ValidVar", Line: 5, Col: 5>
-    <ASSIGN, "=", Line: 5, Col: 14>
-    <INTEGER, "50", Line: 5, Col: 16>
-    <SEMICOLON, ";", Line: 5, Col: 18>
-    [ERROR] Type: ERROR | Line: 7, Col: 5 | Lexeme: '$' | Reason: Invalid token
-    [ERROR] Type: ERROR | Line: 7, Col: 6 | Lexeme: '#' | Reason: Invalid token
-    [ERROR] Type: ERROR | Line: 7, Col: 7 | Lexeme: '@' | Reason: Invalid token
-    <LOGICAL_NOT, "!", Line: 7, Col: 8>
-    <DECLARE, "declare", Line: 9, Col: 5>
-    <IDENTIFIER, "STRING", Line: 9, Col: 13>
-    <IDENTIFIER, "CutOff", Line: 9, Col: 20>
-    <ASSIGN, "=", Line: 9, Col: 27>
-    ' | Reason: Unterminated string literal| Lexeme: '"Oops  ## Error: Unterminated
-    <RIGHT_BRACE, "}", Line: 10, Col: 1>
-    <FINISH, "finish", Line: 11, Col: 1>
+    <DECLARE, "declare", Line: 4, Col: 1>
+    <IDENTIFIER, "X", Line: 4, Col: 9>
+    <ASSIGN, "=", Line: 4, Col: 11>
+    <INTEGER, "10", Line: 4, Col: 13>
+    <SEMICOLON, ";", Line: 4, Col: 15>
+    <IDENTIFIER, "Valid", Line: 10, Col: 1>
+    <IDENTIFIER, "Unicode", Line: 10, Col: 6>
+    <ASSIGN, "=", Line: 10, Col: 14>
+    <STRING, ""Greek omega: \u03A9"", Line: 10, Col: 16>
+    <SEMICOLON, ";", Line: 10, Col: 37>
+    <IDENTIFIER, "Invalid", Line: 11, Col: 5>
+    <IDENTIFIER, "Too", Line: 11, Col: 12>
+    <IDENTIFIER, "Short", Line: 11, Col: 15>
+    <ASSIGN, "=", Line: 11, Col: 21>
+    [ERROR] Type: ERROR | Line: 11, Col: 23 | Lexeme: '"Bad unicode: \u12G"' | Reason: Invalid Unicode escape in string literal
+    <SEMICOLON, ";", Line: 11, Col: 43>
+    <IDENTIFIER, "Invalid", Line: 12, Col: 5>
+    <IDENTIFIER, "Too", Line: 12, Col: 12>
+    <IDENTIFIER, "Long", Line: 12, Col: 15>
+    <ASSIGN, "=", Line: 12, Col: 20>
+    <STRING, ""Bad unicode: \u12345"", Line: 12, Col: 22>
+    <SEMICOLON, ";", Line: 12, Col: 44>
+    <IDENTIFIER, "Invalid", Line: 13, Col: 5>
+    <IDENTIFIER, "Char", Line: 13, Col: 12>
+    <ASSIGN, "=", Line: 13, Col: 17>
+    [ERROR] Type: ERROR | Line: 13, Col: 19 | Lexeme: '"Bad unicode: \u12G4"' | Reason: Invalid Unicode escape in string literal
+    <SEMICOLON, ";", Line: 13, Col: 40>
+    <IDENTIFIER, "Multiline", Line: 14, Col: 5>
+    <IDENTIFIER, "Valid", Line: 14, Col: 14>
+    <ASSIGN, "=", Line: 14, Col: 20>
+    [ERROR] Type: ERROR | Line: 14, Col: 22 | Lexeme: '"""
+            Valid: \u03A9
+            Invalid: \u12
+        """' | Reason: Invalid Unicode escape in string literal
+    <SEMICOLON, ";", Line: 17, Col: 8>
+    <FINISH, "finish", Line: 19, Col: 1>

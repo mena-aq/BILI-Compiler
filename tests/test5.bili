@@ -2,9 +2,18 @@ start
 
 ## This is a single line comment
 declare X = 10;  ## comment after code
+
 #*
    This is a multi-line comment
    It should be ignored completely
 *#
+ValidUnicode = "Greek omega: \u03A9";
+    InvalidTooShort = "Bad unicode: \u12G";
+    InvalidTooLong = "Bad unicode: \u12345";
+    InvalidChar = "Bad unicode: \u12G4";
+    MultilineValid = """
+        Valid: \u03A9
+        Invalid: \u12
+    """;
 
 finish
