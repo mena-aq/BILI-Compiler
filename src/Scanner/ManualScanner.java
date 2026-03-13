@@ -1,3 +1,5 @@
+package Scanner;
+
 import java.util.*;
 
 public class ManualScanner {

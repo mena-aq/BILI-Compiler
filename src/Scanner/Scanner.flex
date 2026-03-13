@@ -1,5 +1,4 @@
 /* --- Section 1: User Code --- */
-import java.util.*;
 
 %%
 

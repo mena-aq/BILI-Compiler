@@ -32,4 +32,4 @@ bin/
 # Java
 *.class
 src/Lexer.java~
-src/Lexer.java
+src/Scanner/Lexer.java

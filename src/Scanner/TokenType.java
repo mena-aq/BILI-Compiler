@@ -1,3 +1,5 @@
+package Scanner;
+
 public enum TokenType {
     // Keywords
     START, FINISH, LOOP, CONDITION, DECLARE, OUTPUT, INPUT,
