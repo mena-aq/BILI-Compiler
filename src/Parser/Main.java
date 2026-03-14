@@ -22,7 +22,7 @@ public class Main {
         noLeftRecursionCFG.print();
 
         // left factor
-        System.out.println("\n--- Removing Left Factoring ---");
+        System.out.println("\n--- Left Factoring ---");
         CFG factoredCFG = LeftFactor.leftFactor(noLeftRecursionCFG);
         factoredCFG.print();
 
