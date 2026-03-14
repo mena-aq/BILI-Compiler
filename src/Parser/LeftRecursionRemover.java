@@ -32,7 +32,7 @@ public class LeftRecursionRemover {
         for (int i = 0; i < order.size(); i++) {
             String Ai = order.get(i);
 
-            // --- inner j loop: substitute lower-indexed NTs ---
+            // inner j loop: substitute lower-indexed NTs to expand indirect left recursion
             for (int j = 0; j < i; j++) {
                 String Aj = order.get(j);
 
@@ -66,7 +66,7 @@ public class LeftRecursionRemover {
                 grammar.put(Ai, newAiProds);
             }
 
-            // --- eliminate direct left recursion in Ai ---
+            // eliminate direct left recursion for Ai
             eliminateDirectLeftRecursion(Ai, grammar);
         }
 

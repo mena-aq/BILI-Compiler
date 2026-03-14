@@ -1,5 +1,8 @@
 package Parser;
 
+import java.util.Map;
+import java.util.Set;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -18,11 +21,19 @@ public class Main {
         CFG noLeftRecursionCFG = LeftRecursionRemover.removeLeftRecursion(cfg);
         noLeftRecursionCFG.print();
 
-        // rleft factor
+        // left factor
         System.out.println("\n--- Removing Left Factoring ---");
         CFG factoredCFG = LeftFactor.leftFactor(noLeftRecursionCFG);
         factoredCFG.print();
 
+        // construct first and follow sets
+        System.out.println("\n--- First Sets ---");
+        Map<String, Set<String>> firstSets = FirstFollowSetConstructor.constructFirstSets(factoredCFG);
+        FirstFollowSetConstructor.printFirstSets(firstSets);
+
+        System.out.println("\n--- Follow Sets ---");
+        Map<String, Set<String>> followSets = FirstFollowSetConstructor.constructFollowSets(factoredCFG, firstSets, null);
+        FirstFollowSetConstructor.printFollowSets(followSets);
 
 
     }
