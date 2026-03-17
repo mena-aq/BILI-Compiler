@@ -8,13 +8,13 @@ import java.util.List;
  * Custom stack implementation using ArrayList (can also use LinkedList)
  * Initialized with $ (bottom marker) and start symbol on top
  */
-public class stack {
+public class Stack {
     private List<String> stack;
 
     /**
      * Constructor - initializes empty stack
      */
-    public stack() {
+    public Stack() {
         this.stack = new ArrayList<>();
     }
 
@@ -167,8 +167,8 @@ public class stack {
      *
      * @return New stack with same contents
      */
-    public stack copy() {
-        stack newStack = new stack();
+    public Stack copy() {
+        Stack newStack = new Stack();
         newStack.stack = new ArrayList<>(this.stack);
         return newStack;
     }

@@ -1,5 +1,10 @@
 package Parser;
 
+import Parser.Grammar.CFG;
+import Parser.Grammar.CFGParser;
+import Parser.Grammar.LeftFactor;
+import Parser.Grammar.LeftRecursionRemover;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -32,14 +37,14 @@ public class Main {
 
         // construct first and follow sets
         System.out.println("\n--- First Sets ---");
-        Map<String, Set<String>> firstSets = FirstFollowSetConstructor.constructFirstSets(factoredCFG);
-        FirstFollowSetConstructor.printFirstSets(firstSets);
+        Map<String, Set<String>> firstSets = FirstFollow.constructFirstSets(factoredCFG);
+        FirstFollow.printFirstSets(firstSets);
 
         System.out.println("\n--- Follow Sets ---");
         // Get the start symbol (first non-terminal in the grammar)
         String startSymbol = factoredCFG.getAllProductions().keySet().iterator().next();
-        Map<String, Set<String>> followSets = FirstFollowSetConstructor.constructFollowSets(factoredCFG, firstSets, startSymbol);
-        FirstFollowSetConstructor.printFollowSets(followSets);
+        Map<String, Set<String>> followSets = FirstFollow.constructFollowSets(factoredCFG, firstSets, startSymbol);
+        FirstFollow.printFollowSets(followSets);
 
         // Task 1.6: LL(1) Parsing Table Construction
         System.out.println("\n--- LL(1) Parsing Table Construction ---");
@@ -58,19 +63,20 @@ public class Main {
         System.out.println("=".repeat(60));
 
         // Task 2.1: Test InputReader
-        System.out.println("\n--- Task 2.1: Testing InputReader ---");
+        //System.out.println("\n--- Task 2.1: Testing InputReader ---");
         String inputFilePath = "src/Parser/input.txt";
 
         try {
             // Get terminals from the grammar for validation
             Set<String> terminals = tableConstructor.collectTerminals();
-            System.out.println("Valid terminals from grammar: " + terminals);
+            //System.out.println("Valid terminals from grammar: " + terminals);
 
             // Read and validate input strings (just one call)
-            System.out.println("\nReading input file with validation:");
+            //System.out.println("\nReading input file with validation:");
             List<List<String>> inputs = InputReader.readInputFile(inputFilePath, terminals);
             InputReader.printInputs(inputs);
 
+            /*
             // ========== Task 2.2: Stack Implementation Testing ==========
             System.out.println("\n--- Task 2.2: Stack Implementation Testing ---");
 
@@ -84,6 +90,7 @@ public class Main {
             System.out.println("Stack after initialization: " + parserStack.toDisplayString());
             System.out.println("Top of stack: " + parserStack.top());
             System.out.println("Stack size: " + parserStack.size());
+
 
             // Test push operation
             System.out.println("\n1. Testing push operation:");
@@ -136,16 +143,17 @@ public class Main {
             System.out.println("Original stack unchanged: " + parserStack.toDisplayString());
 
             System.out.println("\nStack implementation test completed successfully!");
+            */
 
             // ========== Task 2.3: Parsing Algorithm Implementation ==========
-            System.out.println("\n--- Task 2.3: Parsing Algorithm Implementation ---");
+            System.out.println("\n--- LL(1) Parsing Stack ---");
 
             // Create parsing algorithm instance
-            ParsingAlgorithm parsingAlgorithm = new ParsingAlgorithm(tableConstructor, followSets);
+            Parser parsingAlgorithm = new Parser(tableConstructor, followSets);
 
             // Parse all input strings
-            System.out.println("\nParsing all input strings...");
-            List<ParsingAlgorithm.ParseResult> results = parsingAlgorithm.parseAll(inputs);
+            System.out.println("\nParsing all input strings...\n");
+            List<Parser.ParseResult> results = parsingAlgorithm.parseAll(inputs);
 
             // Print summary
             System.out.println("\n" + "=".repeat(60));
@@ -153,7 +161,7 @@ public class Main {
             System.out.println("=".repeat(60));
 
             int successCount = 0;
-            for (ParsingAlgorithm.ParseResult result : results) {
+            for (Parser.ParseResult result : results) {
                 if (result.isSuccess()) {
                     successCount++;
                 }
@@ -163,6 +171,7 @@ public class Main {
             System.out.printf("Successful: %d\n", successCount);
             System.out.printf("Failed: %d\n", results.size() - successCount);
 
+            /*
             // ========== Task 2.4: Error Handling & Recovery ==========
             System.out.println("\n--- Task 2.4: Error Handling & Recovery ---");
 
@@ -177,6 +186,7 @@ public class Main {
             // Test error production method
             System.out.println("\n3. Testing Error Production Method:");
             testErrorProductionMethod();
+             */
 
         } catch (IOException e) {
             System.err.println("\nError: " + e.getMessage());
@@ -193,6 +203,9 @@ public class Main {
         }
     }
 
+
+
+    ////////////////// for test purposes only - can be removed in final version ///////////////
     /**
      * Test function to demonstrate different error types
      */
@@ -224,7 +237,7 @@ public class Main {
 
         // Test Scenario 1: Missing operand
         System.out.println("\n  Scenario 1: Missing operand in 'id + * id'");
-        stack stack1 = new stack();
+        Stack stack1 = new Stack();
         stack1.initialize(tableConstructor.getStartSymbol());
         stack1.push("Term"); // Simulate parser state
 
@@ -236,7 +249,7 @@ public class Main {
 
         // Test Scenario 2: Missing closing parenthesis
         System.out.println("\n  Scenario 2: Missing closing parenthesis in '( id + id'");
-        stack stack2 = new stack();
+        Stack stack2 = new Stack();
         stack2.initialize(tableConstructor.getStartSymbol());
 
         List<String> input2 = new ArrayList<>(Arrays.asList("+", "id", "$"));
