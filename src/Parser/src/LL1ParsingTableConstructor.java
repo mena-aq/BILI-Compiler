@@ -1,6 +1,6 @@
-package Parser;
+package Parser.src;
 
-import Parser.Grammar.CFG;
+import Parser.src.Grammar.CFG;
 
 import java.util.*;
 
@@ -80,11 +80,13 @@ public class LL1ParsingTableConstructor {
         Map<String, List<String>> row = parsingTable.get(nonTerminal);
 
         if (row.get(terminal) != null) {
-            // Conflict detected - grammar is not LL(1)
-            isLL1 = false;
-            System.out.println("Conflict at M[" + nonTerminal + ", " + terminal + "]:");
-            System.out.println("  Existing: " + productionToString(row.get(terminal)));
-            System.out.println("  New: " + productionToString(production));
+            if (!row.get(terminal).equals(production)) {
+                isLL1 = false;
+                System.out.println("Conflict at M[" + nonTerminal + ", " + terminal + "]:");
+                System.out.println("  Existing: " + productionToString(row.get(terminal)));
+                System.out.println("  New: " + productionToString(production));
+            }
+            // If the same production is already there, it's not a conflict, so we do nothing.
         } else {
             row.put(terminal, new ArrayList<>(production));
         }
@@ -97,7 +99,7 @@ public class LL1ParsingTableConstructor {
         if (production == null || production.isEmpty()) {
             return "@";
         }
-        return String.join("", production);
+        return String.join(" ", production);
     }
 
     /**
@@ -182,7 +184,7 @@ public class LL1ParsingTableConstructor {
     /**
      * Print the LL(1) parsing table in a formatted way
      */
-    public void printParsingTable() {
+    public boolean printParsingTable() {
         System.out.println("\n--- LL(1) Parsing Table ---");
 
         Map<String, List<List<String>>> grammar = cfg.getAllProductions();
@@ -224,12 +226,13 @@ public class LL1ParsingTableConstructor {
         } else {
             System.out.println("The grammar is NOT LL(1) - Conflicts detected in parsing table.");
         }
+        return isLL1;
     }
 
     /**
      * Print the parsing table in a more detailed format showing conflicts
      */
-    public void printDetailedTable() {
+    public boolean printDetailedTable() {
         Map<String, List<List<String>>> grammar = cfg.getAllProductions();
         Set<String> nonTerminals = grammar.keySet();
         Set<String> terminals = collectTerminals();
@@ -311,6 +314,7 @@ public class LL1ParsingTableConstructor {
         if (!isLL1) {
             System.out.println("Conflicts found - Grammar has multiple productions for same table entry.");
         }
+        return isLL1;
     }
 
     public boolean isLL1() {

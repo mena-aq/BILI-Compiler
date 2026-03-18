@@ -1,6 +1,6 @@
-package Parser;
+package Parser.src;
 
-import Parser.Grammar.CFG;
+import Parser.src.Grammar.CFG;
 
 import java.util.*;
 

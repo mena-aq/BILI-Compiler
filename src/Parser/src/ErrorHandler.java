@@ -1,8 +1,6 @@
-package Parser;
+package Parser.src;
 
 import java.util.*;
-
-import Parser.Tree;
 
 public class ErrorHandler {
 
@@ -82,8 +80,13 @@ public class ErrorHandler {
             String X = stack.top();
             String a = input.get(ip[0]);
 
-            // Resynchronized — valid table entry exists
+            // Resynchronized — valid table entry exists for NT
             if (parsingTable.containsKey(X) && parsingTable.get(X).get(a) != null) {
+                return true;
+            }
+
+            // Resynchronized — terminal on stack matches input
+            if (!parsingTable.containsKey(X) && X.equals(a)) {
                 return true;
             }
 
@@ -91,14 +94,12 @@ public class ErrorHandler {
             boolean inFollow = followX != null && followX.contains(a);
 
             if (a.equals("$") || inFollow) {
-                // Pop X, keep a
                 String popped = stack.pop();
                 tree.popError();
                 addStep(++stepRef[0], stack.copy(),
                         getRemainingInput(input, ip[0]),
                         "Recovery: popped " + popped);
             } else {
-                // Scan — skip a, keep X
                 tree.skipToken(a);
                 addStep(++stepRef[0], stack.copy(),
                         getRemainingInput(input, ip[0]),

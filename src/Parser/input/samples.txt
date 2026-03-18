@@ -1,0 +1,144 @@
+#####################################################################################
+# GRAMMAR 1
+####################################################################################
+
+# ========== VALID INPUTS (Should parse successfully) ==========
+a b
+b
+
+# ========== ERROR TYPE 1: MISSING SYMBOL ==========
+a                     # Missing 'b' after 'a'
+# ========== ERROR TYPE 2: UNEXPECTED SYMBOL ==========
+a a b                 # Unexpected 'a' after 'a'
+b a                   # Unexpected 'a' after 'b'
+
+
+
+
+#####################################################################################
+# GRAMMAR 2
+####################################################################################
+
+# ========== VALID INPUTS (Should parse successfully) ==========
+id + id * id
+( id + id ) * id
+id * id + id
+id + id + id
+id * id * id
+( id ) * id
+( id + id )
+( id * id )
+( id )
+( ( id ) )
+( id + id ) * ( id + id )
+id * ( id + id ) + id
+( id + id * id ) + id
+id
+
+# ========== ERROR TYPE 1: MISSING SYMBOL ==========
+# Missing operand
+id + * id              # Missing operand between + and *
+id * * id              # Missing operand between * and *
+( id + ) * id          # Missing operand after +
+id + id *              # Missing operand at end
+* id + id              # Missing operand at start
++ id * id              # Missing operand at start
+
+# ========== ERROR TYPE 2: UNEXPECTED SYMBOL ==========
+# Unexpected operators or symbols
+) id + id              # Unexpected closing parenthesis
+id + ) id              # Unexpected closing parenthesis in middle
+id id + id             # Consecutive operands
+( ) id                 # Empty parentheses
+id + ( ) * id          # Empty parentheses in expression
+id + + id              # Consecutive operators
+id * + id              # Mixed consecutive operators
+
+# ========== ERROR TYPE 3: EMPTY TABLE ENTRY ==========
+# Invalid token combinations
+( id + id              # Missing closing parenthesis
+id + ( id * id         # Missing closing parenthesis
+id + id )              # Extra closing parenthesis
+( id + id ) )          # Extra closing parenthesis at end
+id + @ id              # Invalid symbol @ (if not in grammar)
+id # id                # Invalid symbol #
+
+# ========== ERROR TYPE 4: PREMATURE END ==========
+# Incomplete expressions
+id +                   # Incomplete - missing operand after +
+( id + id              # Incomplete - missing closing parenthesis
+id *                   # Incomplete - missing operand after *
+( id                   # Incomplete - missing closing parenthesis
+id + id *              # Incomplete - missing final operand
+
+# ========== COMPLEX ERROR SCENARIOS ==========
+# Multiple errors in one line
+id + * ) id            # Missing operand AND unexpected symbol
+( id + + id ) *        # Consecutive operators AND missing operand
+id id * + id           # Multiple errors: consecutive operands and operators
++ * id ) (             # Chaotic - multiple errors
+
+# ========== BOUNDARY CASES ==========
+# Empty input (should be skipped or handled)
+(empty line above)
+
+# Single error tokens
++
+*
+)
+(
+@
+#
+
+#####################################################################################
+# GRAMMAR 3
+####################################################################################
+
+# ========== VALID INPUTS (Should parse successfully) ==========
+if b then a
+if b then a else a
+if b then if b then a else a
+
+# ========== ERROR TYPE 1: MISSING SYMBOL ==========
+if then a                 # Missing condition 'b'
+if b a                    # Missing 'then' keyword
+if b then                 # Missing statement after 'then'
+if b then a else          # Missing statement after 'else'
+
+# ========== ERROR TYPE 2: UNEXPECTED SYMBOL ==========
+if a then a                # Unexpected condition 'a' instead of 'b'
+if b then b                # Unexpected statement 'b' instead of 'a'
+if b else a                # Unexpected 'else' without 'then'
+if b then a else b         # Unexpected statement 'b' after 'else'
+
+# ========== ERROR TYPE 3: EMPTY TABLE ENTRY ==========
+if b then if then a         # Missing condition in nested if
+if b then if b else a       # Missing 'then' in nested if
+if b then if b then          # Missing statement in nested if
+if b then if b then a else   # Missing statement after 'else' in nested if
+
+# ========== ERROR TYPE 4: PREMATURE END ==========
+if b then a else             # Missing statement after 'else'
+if b then if b then a else   # Missing statement after 'else' in nested if
+if b then if b then           # Missing statement in nested if
+if b then if b else a         # Missing 'then' in nested if
+
+
+#####################################################################################
+# GRAMMAR 4
+####################################################################################
+
+# ========== VALID INPUTS (Should parse successfully) ==========
+a
+b
+c a
+c c a
+
+# ========== ERROR TYPE 1: MISSING SYMBOL ==========
+c                         # Missing 'a' after 'c'
+c c                       # Missing 'a' after 'c c'
+
+# ========== ERROR TYPE 2: UNEXPECTED SYMBOL ==========
+a a                     # Unexpected 'a' after 'a'
+b a                     # Unexpected 'a' after 'b'
+

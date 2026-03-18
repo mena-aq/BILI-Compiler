@@ -1,4 +1,4 @@
-package Parser.Grammar;
+package Parser.src.Grammar;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
