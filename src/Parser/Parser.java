@@ -11,6 +11,9 @@ public class Parser {
     private boolean debug;
     private int ip;
 
+    //for parse tree
+    private List<Tree> trees = new ArrayList<>();
+
     public Parser(LL1ParsingTableConstructor tableConstructor,
                   Map<String, Set<String>> followSets) {
         this.parsingTable = tableConstructor.getParsingTable();
@@ -32,6 +35,11 @@ public class Parser {
         Stack parserStack = new Stack();
         parserStack.initialize(startSymbol);
         ip = 0;
+
+        Tree tree = new Tree();
+        tree.init(startSymbol);
+        trees.add(tree); // TREE: store this input's tree
+        Set<String> nonTerminals = parsingTable.keySet();
 
         ErrorHandler errorHandler = new ErrorHandler(
                 parsingTable, followSets, steps, stepNumber);
@@ -58,6 +66,7 @@ public class Parser {
                 Stack snapshot = parserStack.copy();
                 String inputBefore = getRemainingInput(inputWithDollar, ip);
                 parserStack.pop();
+                tree.match();
                 ip++;
                 addStep(++stepNumber, snapshot, inputBefore, "Match: '" + a + "'");
                 continue;
@@ -78,7 +87,7 @@ public class Parser {
                     int[] ipRef = {ip};
                     int[] stepRef = {stepNumber};
                     if (!errorHandler.recover(parserStack, inputWithDollar,
-                            ipRef, stepRef, lineNumber)) {
+                            ipRef, stepRef, lineNumber,tree)) {
                         addStep(++stepNumber, parserStack.copy(),
                                 getRemainingInput(inputWithDollar, ip),
                                 "ERROR: Cannot recover - terminating parse");
@@ -94,11 +103,13 @@ public class Parser {
                 parserStack.pop();
                 if (production.isEmpty() ||
                         (production.size() == 1 && production.get(0).equals("@"))) {
+                    tree.expand(production, nonTerminals);
                     addStep(++stepNumber, snapshot,
                             getRemainingInput(inputWithDollar, ip),
                             "Expand " + X + " -> @");
                 } else {
                     parserStack.pushAll(production);
+                    tree.expand(production, nonTerminals);
                     addStep(++stepNumber, snapshot,
                             getRemainingInput(inputWithDollar, ip),
                             "Expand " + X + " -> " + String.join(" ", production));
@@ -115,10 +126,12 @@ public class Parser {
 
             if (a.equals("$")) {
                 String popped = parserStack.pop();
+                tree.popError();
                 addStep(++stepNumber, parserStack.copy(),
                         getRemainingInput(inputWithDollar, ip),
                         "Recovery: popped terminal '" + popped + "' (a=$)");
             } else {
+                tree.skipToken(a);
                 addStep(++stepNumber, parserStack.copy(),
                         getRemainingInput(inputWithDollar, ip),
                         "Recovery: skipping '" + a + "'");
@@ -136,7 +149,7 @@ public class Parser {
         }
 
         return new ParseResult(success, steps, errors,
-                String.join(" ", input), lineNumber);
+                String.join(" ", input), lineNumber, tree);
     }
 
     private String getRemainingInput(List<String> input, int ip) {
@@ -169,6 +182,9 @@ public class Parser {
         return results;
     }
 
+    public List<Tree> getTrees() { return trees; }
+
+    // --------------- Parse Step ---------------
     public static class ParseStep {
         private int stepNumber;
         private String stackContents;
@@ -194,22 +210,28 @@ public class Parser {
         public String getAction() { return action; }
     }
 
+    // --------------- Parse Result ---------------
     public static class ParseResult {
         private boolean success;
         private List<ParseStep> steps;
         private List<ErrorHandler.ParseError> errors;
         private String inputString;
         private int lineNumber;
+        private Tree tree;
 
         public ParseResult(boolean success, List<ParseStep> steps,
                            List<ErrorHandler.ParseError> errors,
-                           String inputString, int lineNumber) {
+                           String inputString, int lineNumber,
+                           Tree tree) {
             this.success = success;
             this.steps = steps;
             this.errors = errors;
             this.inputString = inputString;
             this.lineNumber = lineNumber;
+            this.tree = tree;
         }
+
+        public Tree getTree() { return tree; }
 
         public void printResult() {
             System.out.println(success ? "Parse Result: ACCEPT" : "Parse Result: REJECT");
@@ -229,6 +251,14 @@ public class Parser {
                     }
                 }
             }
+
+            if (tree != null) {
+                System.out.println("\nParse Tree:");
+                tree.preOrder(tree.getRoot());
+                System.out.println("\nDOT format (paste into Graphviz):");
+                tree.printDot();
+            }
+
             System.out.println("-".repeat(80));
         }
 

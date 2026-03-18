@@ -21,8 +21,8 @@ public class Main {
             System.exit(1);
         }
         String cfgFilePath = args[0];
-        CFGParser parser = new CFGParser();
-        CFG cfg = parser.parseCFG(cfgFilePath);
+        CFGParser cfgParser = new CFGParser();
+        CFG cfg = cfgParser.parseCFG(cfgFilePath);
         cfg.print();
 
         // eliminate left recursion
@@ -145,15 +145,15 @@ public class Main {
             System.out.println("\nStack implementation test completed successfully!");
             */
 
-            // ========== Task 2.3: Parsing Algorithm Implementation ==========
+            // ========== Parsing Algorithm Implementation ==========
             System.out.println("\n--- LL(1) Parsing Stack ---");
 
             // Create parsing algorithm instance
-            Parser parsingAlgorithm = new Parser(tableConstructor, followSets);
+            Parser parser = new Parser(tableConstructor, followSets);
 
             // Parse all input strings
             System.out.println("\nParsing all input strings...\n");
-            List<Parser.ParseResult> results = parsingAlgorithm.parseAll(inputs);
+            List<Parser.ParseResult> results = parser.parseAll(inputs);
 
             // Print summary
             System.out.println("\n" + "=".repeat(60));
@@ -170,6 +170,7 @@ public class Main {
             System.out.printf("Total inputs: %d\n", results.size());
             System.out.printf("Successful: %d\n", successCount);
             System.out.printf("Failed: %d\n", results.size() - successCount);
+
 
             /*
             // ========== Task 2.4: Error Handling & Recovery ==========

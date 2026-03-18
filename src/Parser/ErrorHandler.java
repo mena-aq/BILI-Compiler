@@ -2,6 +2,8 @@ package Parser;
 
 import java.util.*;
 
+import Parser.Tree;
+
 public class ErrorHandler {
 
     private Map<String, Map<String, List<String>>> parsingTable;
@@ -74,7 +76,7 @@ public class ErrorHandler {
      *   else: scan (skip a)
      */
     public boolean recover(Stack stack, List<String> input, int[] ip,
-                           int[] stepRef, int lineNumber) {
+                           int[] stepRef, int lineNumber, Tree tree) {
 
         while (!stack.isEmpty() && !stack.top().equals("$")) {
             String X = stack.top();
@@ -91,11 +93,13 @@ public class ErrorHandler {
             if (a.equals("$") || inFollow) {
                 // Pop X, keep a
                 String popped = stack.pop();
+                tree.popError();
                 addStep(++stepRef[0], stack.copy(),
                         getRemainingInput(input, ip[0]),
                         "Recovery: popped " + popped);
             } else {
                 // Scan — skip a, keep X
+                tree.skipToken(a);
                 addStep(++stepRef[0], stack.copy(),
                         getRemainingInput(input, ip[0]),
                         "Recovery: skipping '" + a + "'");
