@@ -1,7 +1,37 @@
 # BILI Compiler
 
 The BILI Compiler is a compiler for the BILI language (.bili).
-The compiler is currently at Phase 1 : Scanning
+The compiler is currently at Phase 2 : LL(1) Parser Design & Implementation
+
+### Team Members and Roll Numbers
+- Menahil Ahmad Qureshi - 23i-0546
+- Imama Sarwar - 23i-3048
+
+### Programming Language
+Java
+
+### Compilation Instructions
+```bash
+javac -d out src/Parser/src/Grammar/.java src/Parser/src/.java
+```
+
+### Execution Instructions
+```bash
+java -cp out Parser/src/Main <grammar-file> <input-file>
+```
+#### Examples
+- ##### Example 1: Run with grammar2.txt and valid input
+```bash
+java -cp out Parser/src/Main src/Parser/input/grammar2.txt src/Parser/input/input_valid.txt
+```
+- ##### Example 2: Run with grammar2.txt and invalid input
+``` bash
+java -cp out Parser/src/Main src/Parser/input/grammar2.txt src/Parser/input/input_invalid.txt
+```
+- ##### Example 3: Run with a different grammar file
+``` bash
+java -cp out Parser/src/Main src/Parser/input/grammar1.txt src/Parser/input/input_valid.txt
+```
 
 ### File Extension
 ```
