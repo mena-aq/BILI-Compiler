@@ -1,0 +1,32 @@
+Parsing: id + ( id * id )
+Stack initialized: [$, Expr]
+Parse Result: ACCEPT
+
+Parsing Steps:
+Step  | Stack Contents                   | Remaining Input      | Action
+--------------------------------------------------------------------------------
+1     | $ Expr                         | id + ( id * id ) $   | Initialize stack with $ and Expr
+2     | $ Expr                         | id + ( id * id ) $   | Expand Expr -> Term Expr'
+3     | $ Expr' Term                   | id + ( id * id ) $   | Expand Term -> Factor Term'
+4     | $ Expr' Term' Factor           | id + ( id * id ) $   | Expand Factor -> id
+5     | $ Expr' Term' id               | id + ( id * id ) $   | Match: 'id'
+6     | $ Expr' Term'                  | + ( id * id ) $      | Expand Term' -> @
+7     | $ Expr'                        | + ( id * id ) $      | Expand Expr' -> + Term Expr'
+8     | $ Expr' Term +                 | + ( id * id ) $      | Match: '+'
+9     | $ Expr' Term                   | ( id * id ) $        | Expand Term -> Factor Term'
+10    | $ Expr' Term' Factor           | ( id * id ) $        | Expand Factor -> ( Expr )
+11    | $ Expr' Term' ) Expr (         | ( id * id ) $        | Match: '('
+12    | $ Expr' Term' ) Expr           | id * id ) $          | Expand Expr -> Term Expr'
+13    | $ Expr' Term' ) Expr' Term     | id * id ) $          | Expand Term -> Factor Term'
+14    | $ Expr' Term' ) Expr' Term' Factor | id * id ) $          | Expand Factor -> id
+15    | $ Expr' Term' ) Expr' Term' id | id * id ) $          | Match: 'id'
+16    | $ Expr' Term' ) Expr' Term'    | * id ) $             | Expand Term' -> * Factor Term'
+17    | $ Expr' Term' ) Expr' Term' Factor * | * id ) $             | Match: '*'
+18    | $ Expr' Term' ) Expr' Term' Factor | id ) $               | Expand Factor -> id
+19    | $ Expr' Term' ) Expr' Term' id | id ) $               | Match: 'id'
+20    | $ Expr' Term' ) Expr' Term'    | ) $                  | Expand Term' -> @
+21    | $ Expr' Term' ) Expr'          | ) $                  | Expand Expr' -> @
+22    | $ Expr' Term' )                | ) $                  | Match: ')'
+23    | $ Expr' Term'                  | $                    | Expand Term' -> @
+24    | $ Expr'                        | $                    | Expand Expr' -> @
+25    | $                              | $                    | ACCEPT: Input successfully parsed!

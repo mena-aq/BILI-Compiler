@@ -1,0 +1,43 @@
+│ -            │ id           │ - │
+│ Expr'        │ -            │ @ │ -              │ + Term Expr' │ -            │ @ │
+│ Term'        │ -            │ @ │ * Factor Term' │ @            │ -            │ @ │
+└──────────────┴──────────────┴───┴────────────────┴──────────────┴──────────────┴───┘
+
+LL(1) Check: Grammar is LL(1). Each table entry has at most one production
+
+============================================================
+PART 2: Stack-Based Parser Implementation
+============================================================
+Parsing file: src/Parser/input/input_valid.txt
+Error: Line 2 contains invalid token '(id'. Expected one of: [(, ), *, +, id]
+
+=== Loaded Input Strings ===
+ 1: id + id
+============================
+
+
+--- LL(1) Parsing Stack ---
+
+Parsing all input strings...
+
+Parsing: id + id
+Stack initialized: [$, Expr]
+Parse Result: ACCEPT
+
+Parsing Steps:
+Step  | Stack Contents                   | Remaining Input      | Action
+--------------------------------------------------------------------------------
+1     | $ Expr                         | id + id $            | Initialize stack with $ and Expr
+2     | $ Expr                         | id + id $            | Expand Expr -> Term Expr'
+3     | $ Expr' Term                   | id + id $            | Expand Term -> Factor Term'
+4     | $ Expr' Term' Factor           | id + id $            | Expand Factor -> id
+5     | $ Expr' Term' id               | id + id $            | Match: 'id'
+6     | $ Expr' Term'                  | + id $               | Expand Term' -> @
+7     | $ Expr'                        | + id $               | Expand Expr' -> + Term Expr'
+8     | $ Expr' Term +                 | + id $               | Match: '+'
+9     | $ Expr' Term                   | id $                 | Expand Term -> Factor Term'
+10    | $ Expr' Term' Factor           | id $                 | Expand Factor -> id
+11    | $ Expr' Term' id               | id $                 | Match: 'id'
+12    | $ Expr' Term'                  | $                    | Expand Term' -> @
+13    | $ Expr'                        | $                    | Expand Expr' -> @
+14    | $                              | $                    | ACCEPT: Input successfully parsed!
