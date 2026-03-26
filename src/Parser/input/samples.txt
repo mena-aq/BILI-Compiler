@@ -13,6 +13,10 @@ a a b                 # Unexpected 'a' after 'a'
 b a                   # Unexpected 'a' after 'b'
 
 
+# ========== EDGE CASES ==========
+(empty line above)    # Empty input (should be skipped or handled)
+@
+b
 
 
 #####################################################################################
@@ -78,9 +82,11 @@ id + * ) id            # Missing operand AND unexpected symbol
 id id * + id           # Multiple errors: consecutive operands and operators
 + * id ) (             # Chaotic - multiple errors
 
-# ========== BOUNDARY CASES ==========
+# ========== EDGE CASES ==========
 # Empty input (should be skipped or handled)
 (empty line above)
+@
+id
 
 # Single error tokens
 +
@@ -89,6 +95,9 @@ id id * + id           # Multiple errors: consecutive operands and operators
 (
 @
 #
+
+
+
 
 #####################################################################################
 # GRAMMAR 3
@@ -123,6 +132,10 @@ if b then if b then a else   # Missing statement after 'else' in nested if
 if b then if b then           # Missing statement in nested if
 if b then if b else a         # Missing 'then' in nested if
 
+# ========== edge cases SCENARIOS ==========
+(empty line above)            # Empty input (should be skipped or handled)
+@
+a
 
 #####################################################################################
 # GRAMMAR 4
@@ -142,3 +155,7 @@ c c                       # Missing 'a' after 'c c'
 a a                     # Unexpected 'a' after 'a'
 b a                     # Unexpected 'a' after 'b'
 
+# ========== EDGE CASES ==========
+(empty line above)        # Empty input (should be skipped or handled)
+@
+a

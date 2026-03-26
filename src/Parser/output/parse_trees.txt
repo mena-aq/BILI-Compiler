@@ -1,0 +1,149 @@
+Parsing: id + id
+
+Parse Tree:
+Expr
+Term
+Factor
+id
+Term'
+@
+Expr'
++
+Term
+Factor
+id
+Term'
+@
+Expr'
+@
+
+DOT format (paste into Graphviz):
+digraph ParseTree {
+  node [fontname="Helvetica"];
+  edge [arrowhead=none];
+
+  n0 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n0 -> n1;
+  n1 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
+  n1 -> n3;
+  n3 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n3 -> n5;
+  n5 [label="id" shape=box style=filled fillcolor=lightblue];
+  n1 -> n4;
+  n4 [label="Term'" shape=ellipse style=filled fillcolor=lightyellow];
+  n4 -> n6;
+  n6 [label="@" shape=box style=filled fillcolor=lightblue];
+  n0 -> n2;
+  n2 [label="Expr'" shape=ellipse style=filled fillcolor=lightyellow];
+  n2 -> n7;
+  n7 [label="+" shape=box style=filled fillcolor=lightblue];
+  n2 -> n8;
+  n8 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
+  n8 -> n10;
+  n10 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n10 -> n12;
+  n12 [label="id" shape=box style=filled fillcolor=lightblue];
+  n8 -> n11;
+  n11 [label="Term'" shape=ellipse style=filled fillcolor=lightyellow];
+  n11 -> n13;
+  n13 [label="@" shape=box style=filled fillcolor=lightblue];
+  n2 -> n9;
+  n9 [label="Expr'" shape=ellipse style=filled fillcolor=lightyellow];
+  n9 -> n14;
+  n14 [label="@" shape=box style=filled fillcolor=lightblue];
+}
+
+
+Parsing: id + ( id * id )
+
+Parse Tree:
+Expr
+Term
+Factor
+id
+Term'
+@
+Expr'
++
+Term
+Factor
+(
+Expr
+Term
+Factor
+id
+Term'
+*
+Factor
+id
+Term'
+@
+Expr'
+@
+)
+Term'
+@
+Expr'
+@
+
+DOT format (paste into Graphviz):
+digraph ParseTree {
+  node [fontname="Helvetica"];
+  edge [arrowhead=none];
+
+  n0 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n0 -> n1;
+  n1 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
+  n1 -> n3;
+  n3 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n3 -> n5;
+  n5 [label="id" shape=box style=filled fillcolor=lightblue];
+  n1 -> n4;
+  n4 [label="Term'" shape=ellipse style=filled fillcolor=lightyellow];
+  n4 -> n6;
+  n6 [label="@" shape=box style=filled fillcolor=lightblue];
+  n0 -> n2;
+  n2 [label="Expr'" shape=ellipse style=filled fillcolor=lightyellow];
+  n2 -> n7;
+  n7 [label="+" shape=box style=filled fillcolor=lightblue];
+  n2 -> n8;
+  n8 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
+  n8 -> n10;
+  n10 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n10 -> n12;
+  n12 [label="(" shape=box style=filled fillcolor=lightblue];
+  n10 -> n13;
+  n13 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n13 -> n15;
+  n15 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
+  n15 -> n17;
+  n17 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n17 -> n19;
+  n19 [label="id" shape=box style=filled fillcolor=lightblue];
+  n15 -> n18;
+  n18 [label="Term'" shape=ellipse style=filled fillcolor=lightyellow];
+  n18 -> n20;
+  n20 [label="*" shape=box style=filled fillcolor=lightblue];
+  n18 -> n21;
+  n21 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n21 -> n23;
+  n23 [label="id" shape=box style=filled fillcolor=lightblue];
+  n18 -> n22;
+  n22 [label="Term'" shape=ellipse style=filled fillcolor=lightyellow];
+  n22 -> n24;
+  n24 [label="@" shape=box style=filled fillcolor=lightblue];
+  n13 -> n16;
+  n16 [label="Expr'" shape=ellipse style=filled fillcolor=lightyellow];
+  n16 -> n25;
+  n25 [label="@" shape=box style=filled fillcolor=lightblue];
+  n10 -> n14;
+  n14 [label=")" shape=box style=filled fillcolor=lightblue];
+  n8 -> n11;
+  n11 [label="Term'" shape=ellipse style=filled fillcolor=lightyellow];
+  n11 -> n26;
+  n26 [label="@" shape=box style=filled fillcolor=lightblue];
+  n2 -> n9;
+  n9 [label="Expr'" shape=ellipse style=filled fillcolor=lightyellow];
+  n9 -> n27;
+  n27 [label="@" shape=box style=filled fillcolor=lightblue];
+}
