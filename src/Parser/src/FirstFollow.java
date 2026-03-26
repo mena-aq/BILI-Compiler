@@ -1,8 +1,10 @@
-package Parser;
+package Parser.src;
+
+import Parser.src.Grammar.CFG;
 
 import java.util.*;
 
-public class FirstFollowSetConstructor {
+public class FirstFollow {
 
      //  --------------------------------- FIRST SETS ---------------------------------------
 

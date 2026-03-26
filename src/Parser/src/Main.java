@@ -1,4 +1,9 @@
-package Parser;
+package Parser.src;
+
+import Parser.src.Grammar.CFG;
+import Parser.src.Grammar.CFGParser;
+import Parser.src.Grammar.LeftFactor;
+import Parser.src.Grammar.LeftRecursionRemover;
 
 import java.util.Map;
 import java.util.Set;
@@ -11,13 +16,15 @@ public class Main {
 
     public static void main(String[] args) {
         // parse cfg from file
-        if (args.length < 1) {
-            System.err.println("Usage: java Main <cfg_file_path>");
+        if (args.length < 2) {
+            System.err.println("Usage: java Main <cfg_file_path> <input_file_path>");
             System.exit(1);
         }
         String cfgFilePath = args[0];
-        CFGParser parser = new CFGParser();
-        CFG cfg = parser.parseCFG(cfgFilePath);
+        String inputFilePath = args[1];
+
+        CFGParser cfgParser = new CFGParser();
+        CFG cfg = cfgParser.parseCFG(cfgFilePath);
         cfg.print();
 
         // eliminate left recursion
@@ -32,14 +39,14 @@ public class Main {
 
         // construct first and follow sets
         System.out.println("\n--- First Sets ---");
-        Map<String, Set<String>> firstSets = FirstFollowSetConstructor.constructFirstSets(factoredCFG);
-        FirstFollowSetConstructor.printFirstSets(firstSets);
+        Map<String, Set<String>> firstSets = FirstFollow.constructFirstSets(factoredCFG);
+        FirstFollow.printFirstSets(firstSets);
 
         System.out.println("\n--- Follow Sets ---");
         // Get the start symbol (first non-terminal in the grammar)
         String startSymbol = factoredCFG.getAllProductions().keySet().iterator().next();
-        Map<String, Set<String>> followSets = FirstFollowSetConstructor.constructFollowSets(factoredCFG, firstSets, startSymbol);
-        FirstFollowSetConstructor.printFollowSets(followSets);
+        Map<String, Set<String>> followSets = FirstFollow.constructFollowSets(factoredCFG, firstSets, startSymbol);
+        FirstFollow.printFollowSets(followSets);
 
         // Task 1.6: LL(1) Parsing Table Construction
         System.out.println("\n--- LL(1) Parsing Table Construction ---");
@@ -50,7 +57,13 @@ public class Main {
         tableConstructor.constructParsingTable();
 
         // Print the parsing table in detailed format (with borders)
-        tableConstructor.printDetailedTable();
+        boolean isLL1Grammar = tableConstructor.printDetailedTable();
+
+        // if not ll1, dont proceed to parsing
+        if (!isLL1Grammar) {
+            System.out.println("\nThe grammar is not LL(1). Parsing cannot proceed.");
+            return;
+        }
 
         // ========== PART 2: Stack-Based Parser Implementation ==========
         System.out.println("\n" + "=".repeat(60));
@@ -58,19 +71,20 @@ public class Main {
         System.out.println("=".repeat(60));
 
         // Task 2.1: Test InputReader
-        System.out.println("\n--- Task 2.1: Testing InputReader ---");
-        String inputFilePath = "src/Parser/input.txt";
+        //System.out.println("\n--- Task 2.1: Testing InputReader ---");
+        System.out.println("Parsing file: " + inputFilePath);
 
         try {
             // Get terminals from the grammar for validation
             Set<String> terminals = tableConstructor.collectTerminals();
-            System.out.println("Valid terminals from grammar: " + terminals);
+            //System.out.println("Valid terminals from grammar: " + terminals);
 
             // Read and validate input strings (just one call)
-            System.out.println("\nReading input file with validation:");
+            //System.out.println("\nReading input file with validation:");
             List<List<String>> inputs = InputReader.readInputFile(inputFilePath, terminals);
             InputReader.printInputs(inputs);
 
+            /*
             // ========== Task 2.2: Stack Implementation Testing ==========
             System.out.println("\n--- Task 2.2: Stack Implementation Testing ---");
 
@@ -84,6 +98,7 @@ public class Main {
             System.out.println("Stack after initialization: " + parserStack.toDisplayString());
             System.out.println("Top of stack: " + parserStack.top());
             System.out.println("Stack size: " + parserStack.size());
+
 
             // Test push operation
             System.out.println("\n1. Testing push operation:");
@@ -136,16 +151,17 @@ public class Main {
             System.out.println("Original stack unchanged: " + parserStack.toDisplayString());
 
             System.out.println("\nStack implementation test completed successfully!");
+            */
 
-            // ========== Task 2.3: Parsing Algorithm Implementation ==========
-            System.out.println("\n--- Task 2.3: Parsing Algorithm Implementation ---");
+            // ========== Parsing Algorithm Implementation ==========
+            System.out.println("\n--- LL(1) Parsing Stack ---");
 
             // Create parsing algorithm instance
-            ParsingAlgorithm parsingAlgorithm = new ParsingAlgorithm(tableConstructor, followSets);
+            Parser parser = new Parser(tableConstructor, followSets);
 
             // Parse all input strings
-            System.out.println("\nParsing all input strings...");
-            List<ParsingAlgorithm.ParseResult> results = parsingAlgorithm.parseAll(inputs);
+            System.out.println("\nParsing all input strings...\n");
+            List<Parser.ParseResult> results = parser.parseAll(inputs);
 
             // Print summary
             System.out.println("\n" + "=".repeat(60));
@@ -153,7 +169,7 @@ public class Main {
             System.out.println("=".repeat(60));
 
             int successCount = 0;
-            for (ParsingAlgorithm.ParseResult result : results) {
+            for (Parser.ParseResult result : results) {
                 if (result.isSuccess()) {
                     successCount++;
                 }
@@ -163,6 +179,8 @@ public class Main {
             System.out.printf("Successful: %d\n", successCount);
             System.out.printf("Failed: %d\n", results.size() - successCount);
 
+
+            /*
             // ========== Task 2.4: Error Handling & Recovery ==========
             System.out.println("\n--- Task 2.4: Error Handling & Recovery ---");
 
@@ -177,10 +195,11 @@ public class Main {
             // Test error production method
             System.out.println("\n3. Testing Error Production Method:");
             testErrorProductionMethod();
+             */
 
         } catch (IOException e) {
             System.err.println("\nError: " + e.getMessage());
-            System.err.println("\nPlease create an input file at: src/Parser/input.txt");
+            System.err.println("\nPlease create an input file at: src/Parser/input_valid.txt");
             System.err.println("With content like:");
             System.err.println("  id + id * id");
             System.err.println("  ( id + id ) * id");
@@ -193,80 +212,5 @@ public class Main {
         }
     }
 
-    /**
-     * Test function to demonstrate different error types
-     */
-    private static void testErrorTypes(Map<String, Set<String>> followSets) {
-        System.out.println("\n  Error Type 1: Missing Symbol");
-        System.out.println("    Example: 'id + * id' - Missing operand between + and *");
-        System.out.println("    Detection: Parser expects 'id' but finds '*'");
 
-        System.out.println("\n  Error Type 2: Unexpected Symbol");
-        System.out.println("    Example: '* id + id' - Expression starts with operator");
-        System.out.println("    Detection: Parser expects 'id' or '(' but finds '*'");
-
-        System.out.println("\n  Error Type 3: Empty Table Entry");
-        System.out.println("    Example: ') id' - Closing parenthesis with no matching opening");
-        System.out.println("    Detection: No production in M[Expr, ')' ]");
-
-        System.out.println("\n  Error Type 4: Premature End");
-        System.out.println("    Example: 'id +' - Incomplete expression");
-        System.out.println("    Detection: Input ends but stack not empty");
-    }
-
-    /**
-     * Test panic mode recovery with sample scenarios
-     */
-    private static void testPanicModeRecovery(Map<String, Set<String>> followSets,
-                                              LL1ParsingTableConstructor tableConstructor) {
-        // Create panic mode recovery instance
-        ErrorHandling.PanicModeRecovery panicRecovery = new ErrorHandling.PanicModeRecovery(followSets);
-
-        // Test Scenario 1: Missing operand
-        System.out.println("\n  Scenario 1: Missing operand in 'id + * id'");
-        stack stack1 = new stack();
-        stack1.initialize(tableConstructor.getStartSymbol());
-        stack1.push("Term"); // Simulate parser state
-
-        List<String> input1 = new ArrayList<>(Arrays.asList("*", "id", "$"));
-        ErrorHandling.MutableInt ip1 = new ErrorHandling.MutableInt(0);
-
-        boolean recovered1 = panicRecovery.recover(stack1, input1, ip1, "Term", 1, 5);
-        System.out.println("    Recovery " + (recovered1 ? "successful" : "failed"));
-
-        // Test Scenario 2: Missing closing parenthesis
-        System.out.println("\n  Scenario 2: Missing closing parenthesis in '( id + id'");
-        stack stack2 = new stack();
-        stack2.initialize(tableConstructor.getStartSymbol());
-
-        List<String> input2 = new ArrayList<>(Arrays.asList("+", "id", "$"));
-        ErrorHandling.MutableInt ip2 = new ErrorHandling.MutableInt(0);
-
-        boolean recovered2 = panicRecovery.recover(stack2, input2, ip2, "Expr", 2, 10);
-        System.out.println("    Recovery " + (recovered2 ? "successful" : "failed"));
-    }
-
-    /**
-     * Test error production method
-     */
-    private static void testErrorProductionMethod() {
-        ErrorHandling.ErrorProductionRecovery prodRecovery = new ErrorHandling.ErrorProductionRecovery();
-
-        // Test missing operand error
-        System.out.println("\n  Testing missing operand insertion:");
-        List<String> testInput = new ArrayList<>(Arrays.asList("+", "*", "id", "$"));
-        ErrorHandling.MutableInt ip = new ErrorHandling.MutableInt(0);
-
-        boolean handled = prodRecovery.handleError("Expr", "+", testInput, ip, 3, 7);
-        System.out.println("    Error handled: " + handled);
-        System.out.println("    Input after handling: " + String.join(" ", testInput));
-
-        // Display any errors recorded
-        if (!prodRecovery.getErrors().isEmpty()) {
-            System.out.println("\n  Recorded errors:");
-            for (ErrorHandling.ParseError error : prodRecovery.getErrors()) {
-                System.out.println("     " + error.toShortString());
-            }
-        }
-    }
 }

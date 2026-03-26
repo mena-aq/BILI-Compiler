@@ -1,4 +1,4 @@
-package Parser;
+package Parser.src.Grammar;
 
 import java.util.*;
 

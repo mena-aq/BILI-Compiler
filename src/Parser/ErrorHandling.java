@@ -1,4 +1,8 @@
+/// ///////////// I DONT THINK THIS FILE IS USED ANYMORE, BUT I DONT WANT TO DELETE IT JUST IN CASE /////////////
+
 package Parser;
+
+import Parser.src.Stack;
 
 import java.util.*;
 
@@ -109,7 +113,7 @@ public class ErrorHandling {
          * @param column Current column
          * @return true if recovery successful, false otherwise
          */
-        public boolean recover(stack stack, List<String> input, MutableInt ip,
+        public boolean recover(Parser.src.Stack stack, List<String> input, MutableInt ip,
                                String currentNonTerminal, int lineNumber, int column) {
             recoveryPerformed = false;
 
@@ -369,7 +373,7 @@ public class ErrorHandling {
         PanicModeRecovery panicRecovery = new PanicModeRecovery(sampleFollow);
 
         // Simulate error scenario
-        stack testStack = new stack();
+        Parser.src.Stack testStack = new Stack();
         testStack.initialize("Expr");
         testStack.push("Term");
 
