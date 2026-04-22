@@ -1,218 +1,156 @@
-=== INPUT: id + id ===
+=== INPUT: other_lr1 ===
 
 digraph ParseTree {
   node [fontname="Helvetica"];
   edge [arrowhead=none];
 
-  n9 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n9 -> n4;
-  n4 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n4 -> n3;
-  n3 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n3 -> n2;
-  n2 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n2 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
   n2 -> n1;
-  n1 [label="id" shape=box style=filled fillcolor=lightblue];
-  n9 -> n5;
-  n5 [label="+" shape=box style=filled fillcolor=lightblue];
-  n9 -> n8;
-  n8 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n8 -> n7;
-  n7 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n7 -> n6;
-  n6 [label="id" shape=box style=filled fillcolor=lightblue];
+  n1 [label="other" shape=box style=filled fillcolor=lightblue];
 }
 
 
 ================================================================================
 
-=== INPUT: id + id * id ===
+=== INPUT: if id then other_lr1 ===
 
 digraph ParseTree {
   node [fontname="Helvetica"];
   edge [arrowhead=none];
 
-  n13 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n13 -> n4;
-  n4 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n4 -> n3;
-  n3 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n3 -> n2;
-  n2 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n2 -> n1;
-  n1 [label="id" shape=box style=filled fillcolor=lightblue];
-  n13 -> n5;
-  n5 [label="+" shape=box style=filled fillcolor=lightblue];
-  n13 -> n12;
-  n12 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n12 -> n8;
-  n8 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n8 -> n7;
-  n7 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n7 -> n6;
-  n6 [label="id" shape=box style=filled fillcolor=lightblue];
-  n12 -> n9;
-  n9 [label="*" shape=box style=filled fillcolor=lightblue];
-  n12 -> n11;
-  n11 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n11 -> n10;
-  n10 [label="id" shape=box style=filled fillcolor=lightblue];
-}
-
-
-================================================================================
-
-=== INPUT: ( id + id ) * id ===
-
-digraph ParseTree {
-  node [fontname="Helvetica"];
-  edge [arrowhead=none];
-
-  n18 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n18 -> n17;
-  n17 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n17 -> n13;
-  n13 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n13 -> n12;
-  n12 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n12 -> n1;
-  n1 [label="(" shape=box style=filled fillcolor=lightblue];
-  n12 -> n10;
-  n10 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n10 -> n5;
-  n5 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n5 -> n4;
-  n4 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n4 -> n3;
-  n3 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n7 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n7 -> n1;
+  n1 [label="if" shape=box style=filled fillcolor=lightblue];
+  n7 -> n3;
+  n3 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
   n3 -> n2;
   n2 [label="id" shape=box style=filled fillcolor=lightblue];
-  n10 -> n6;
-  n6 [label="+" shape=box style=filled fillcolor=lightblue];
-  n10 -> n9;
-  n9 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n9 -> n8;
-  n8 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n8 -> n7;
-  n7 [label="id" shape=box style=filled fillcolor=lightblue];
-  n12 -> n11;
-  n11 [label=")" shape=box style=filled fillcolor=lightblue];
-  n17 -> n14;
-  n14 [label="*" shape=box style=filled fillcolor=lightblue];
-  n17 -> n16;
-  n16 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n16 -> n15;
-  n15 [label="id" shape=box style=filled fillcolor=lightblue];
-}
-
-
-================================================================================
-
-=== INPUT: id + id_lr1 ===
-
-digraph ParseTree {
-  node [fontname="Helvetica"];
-  edge [arrowhead=none];
-
-  n9 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n9 -> n4;
-  n4 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n4 -> n3;
-  n3 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n3 -> n2;
-  n2 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n2 -> n1;
-  n1 [label="id" shape=box style=filled fillcolor=lightblue];
-  n9 -> n5;
-  n5 [label="+" shape=box style=filled fillcolor=lightblue];
-  n9 -> n8;
-  n8 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n8 -> n7;
-  n7 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n7 -> n4;
+  n4 [label="then" shape=box style=filled fillcolor=lightblue];
   n7 -> n6;
-  n6 [label="id" shape=box style=filled fillcolor=lightblue];
+  n6 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n6 -> n5;
+  n5 [label="other" shape=box style=filled fillcolor=lightblue];
 }
 
 
 ================================================================================
 
-=== INPUT: id + id * id_lr1 ===
+=== INPUT: if id then other else other_lr1 ===
 
 digraph ParseTree {
   node [fontname="Helvetica"];
   edge [arrowhead=none];
 
-  n13 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n13 -> n4;
-  n4 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n4 -> n3;
-  n3 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n3 -> n2;
-  n2 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n2 -> n1;
-  n1 [label="id" shape=box style=filled fillcolor=lightblue];
-  n13 -> n5;
-  n5 [label="+" shape=box style=filled fillcolor=lightblue];
-  n13 -> n12;
-  n12 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n12 -> n8;
-  n8 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n8 -> n7;
-  n7 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n7 -> n6;
-  n6 [label="id" shape=box style=filled fillcolor=lightblue];
-  n12 -> n9;
-  n9 [label="*" shape=box style=filled fillcolor=lightblue];
-  n12 -> n11;
-  n11 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n11 -> n10;
-  n10 [label="id" shape=box style=filled fillcolor=lightblue];
-}
-
-
-================================================================================
-
-=== INPUT: ( id + id ) * id_lr1 ===
-
-digraph ParseTree {
-  node [fontname="Helvetica"];
-  edge [arrowhead=none];
-
-  n18 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n18 -> n17;
-  n17 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n17 -> n13;
-  n13 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n13 -> n12;
-  n12 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n12 -> n1;
-  n1 [label="(" shape=box style=filled fillcolor=lightblue];
-  n12 -> n10;
-  n10 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n10 -> n5;
-  n5 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
-  n5 -> n4;
-  n4 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
-  n4 -> n3;
-  n3 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
+  n10 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n10 -> n1;
+  n1 [label="if" shape=box style=filled fillcolor=lightblue];
+  n10 -> n3;
+  n3 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
   n3 -> n2;
   n2 [label="id" shape=box style=filled fillcolor=lightblue];
+  n10 -> n4;
+  n4 [label="then" shape=box style=filled fillcolor=lightblue];
   n10 -> n6;
-  n6 [label="+" shape=box style=filled fillcolor=lightblue];
+  n6 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n6 -> n5;
+  n5 [label="other" shape=box style=filled fillcolor=lightblue];
+  n10 -> n7;
+  n7 [label="else" shape=box style=filled fillcolor=lightblue];
   n10 -> n9;
-  n9 [label="Term" shape=ellipse style=filled fillcolor=lightyellow];
+  n9 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
   n9 -> n8;
-  n8 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n8 -> n7;
-  n7 [label="id" shape=box style=filled fillcolor=lightblue];
-  n12 -> n11;
-  n11 [label=")" shape=box style=filled fillcolor=lightblue];
-  n17 -> n14;
-  n14 [label="*" shape=box style=filled fillcolor=lightblue];
+  n8 [label="other" shape=box style=filled fillcolor=lightblue];
+}
+
+
+================================================================================
+
+=== INPUT: if id then if id then other else other_lr1 ===
+
+digraph ParseTree {
+  node [fontname="Helvetica"];
+  edge [arrowhead=none];
+
+  n15 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n15 -> n1;
+  n1 [label="if" shape=box style=filled fillcolor=lightblue];
+  n15 -> n3;
+  n3 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n3 -> n2;
+  n2 [label="id" shape=box style=filled fillcolor=lightblue];
+  n15 -> n4;
+  n4 [label="then" shape=box style=filled fillcolor=lightblue];
+  n15 -> n14;
+  n14 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n14 -> n5;
+  n5 [label="if" shape=box style=filled fillcolor=lightblue];
+  n14 -> n7;
+  n7 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n7 -> n6;
+  n6 [label="id" shape=box style=filled fillcolor=lightblue];
+  n14 -> n8;
+  n8 [label="then" shape=box style=filled fillcolor=lightblue];
+  n14 -> n10;
+  n10 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n10 -> n9;
+  n9 [label="other" shape=box style=filled fillcolor=lightblue];
+  n14 -> n11;
+  n11 [label="else" shape=box style=filled fillcolor=lightblue];
+  n14 -> n13;
+  n13 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n13 -> n12;
+  n12 [label="other" shape=box style=filled fillcolor=lightblue];
+}
+
+
+================================================================================
+
+=== INPUT: if id then if id then other else if id then other_lr1 ===
+
+digraph ParseTree {
+  node [fontname="Helvetica"];
+  edge [arrowhead=none];
+
+  n20 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n20 -> n1;
+  n1 [label="if" shape=box style=filled fillcolor=lightblue];
+  n20 -> n3;
+  n3 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n3 -> n2;
+  n2 [label="id" shape=box style=filled fillcolor=lightblue];
+  n20 -> n4;
+  n4 [label="then" shape=box style=filled fillcolor=lightblue];
+  n20 -> n19;
+  n19 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n19 -> n5;
+  n5 [label="if" shape=box style=filled fillcolor=lightblue];
+  n19 -> n7;
+  n7 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n7 -> n6;
+  n6 [label="id" shape=box style=filled fillcolor=lightblue];
+  n19 -> n8;
+  n8 [label="then" shape=box style=filled fillcolor=lightblue];
+  n19 -> n10;
+  n10 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n10 -> n9;
+  n9 [label="other" shape=box style=filled fillcolor=lightblue];
+  n19 -> n11;
+  n11 [label="else" shape=box style=filled fillcolor=lightblue];
+  n19 -> n18;
+  n18 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
+  n18 -> n12;
+  n12 [label="if" shape=box style=filled fillcolor=lightblue];
+  n18 -> n14;
+  n14 [label="Expr" shape=ellipse style=filled fillcolor=lightyellow];
+  n14 -> n13;
+  n13 [label="id" shape=box style=filled fillcolor=lightblue];
+  n18 -> n15;
+  n15 [label="then" shape=box style=filled fillcolor=lightblue];
+  n18 -> n17;
+  n17 [label="Stmt" shape=ellipse style=filled fillcolor=lightyellow];
   n17 -> n16;
-  n16 [label="Factor" shape=ellipse style=filled fillcolor=lightyellow];
-  n16 -> n15;
-  n15 [label="id" shape=box style=filled fillcolor=lightblue];
+  n16 [label="other" shape=box style=filled fillcolor=lightblue];
 }
 
 

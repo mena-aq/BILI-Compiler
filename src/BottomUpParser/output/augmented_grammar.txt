@@ -1,20 +1,17 @@
 === AUGMENTED GRAMMAR ===
 
-Expr' -> Expr
-Expr -> Expr + Term | Term
-Term -> Term * Factor | Factor
-Factor -> ( Expr ) | id
+Stmt' -> Stmt
+Stmt -> if Expr then Stmt | if Expr then Stmt else Stmt | other
+Expr -> id
 
 === FIRST SETS ===
 
-First(Expr') = [(, id]
-First(Expr) = [(, id]
-First(Term) = [(, id]
-First(Factor) = [(, id]
+First(Stmt') = [other, if]
+First(Stmt) = [other, if]
+First(Expr) = [id]
 
 === FOLLOW SETS ===
 
-Follow(Expr') = [$]
-Follow(Expr) = [$, ), +]
-Follow(Term) = [$, ), *, +]
-Follow(Factor) = [$, ), *, +]
+Follow(Stmt') = [$]
+Follow(Stmt) = [$, else]
+Follow(Expr) = [then]

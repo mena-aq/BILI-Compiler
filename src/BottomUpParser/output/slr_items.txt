@@ -1,60 +1,46 @@
 === CANONICAL COLLECTION (DFA STATES) - SLR(1) ===
 
 I0:
-  Factor -> . ( Expr )
-  Expr' -> . Expr
-  Term -> . Factor
-  Expr -> . Expr + Term
-  Expr -> . Term
-  Term -> . Term * Factor
-  Factor -> . id
+  Stmt -> . other
+  Stmt' -> . Stmt
+  Stmt -> . if Expr then Stmt else Stmt
+  Stmt -> . if Expr then Stmt
 
 I1:
-  Expr' -> Expr .
-  Expr -> Expr . + Term
+  Stmt -> other .
 
 I2:
-  Term -> Factor .
+  Stmt -> if . Expr then Stmt else Stmt
+  Stmt -> if . Expr then Stmt
+  Expr -> . id
 
 I3:
-  Factor -> ( . Expr )
-  Factor -> . ( Expr )
-  Term -> . Factor
-  Expr -> . Expr + Term
-  Expr -> . Term
-  Term -> . Term * Factor
-  Factor -> . id
+  Stmt' -> Stmt .
 
 I4:
-  Term -> Term . * Factor
-  Expr -> Term .
+  Stmt -> if Expr . then Stmt else Stmt
+  Stmt -> if Expr . then Stmt
 
 I5:
-  Factor -> id .
+  Expr -> id .
 
 I6:
-  Expr -> Expr + . Term
-  Factor -> . ( Expr )
-  Term -> . Factor
-  Term -> . Term * Factor
-  Factor -> . id
+  Stmt -> if Expr then . Stmt else Stmt
+  Stmt -> if Expr then . Stmt
+  Stmt -> . other
+  Stmt -> . if Expr then Stmt else Stmt
+  Stmt -> . if Expr then Stmt
 
 I7:
-  Expr -> Expr . + Term
-  Factor -> ( Expr . )
+  Stmt -> if Expr then Stmt . else Stmt
+  Stmt -> if Expr then Stmt .
 
 I8:
-  Term -> Term * . Factor
-  Factor -> . ( Expr )
-  Factor -> . id
+  Stmt -> if Expr then Stmt else . Stmt
+  Stmt -> . other
+  Stmt -> . if Expr then Stmt else Stmt
+  Stmt -> . if Expr then Stmt
 
 I9:
-  Expr -> Expr + Term .
-  Term -> Term . * Factor
-
-I10:
-  Factor -> ( Expr ) .
-
-I11:
-  Term -> Term * Factor .
+  Stmt -> if Expr then Stmt else Stmt .
 

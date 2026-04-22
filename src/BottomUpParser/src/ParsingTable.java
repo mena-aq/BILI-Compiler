@@ -220,6 +220,7 @@ public class ParsingTable {
             actionTable.put(stateIndex, actionRow);
             gotoTable.put(stateIndex, gotoRow);
         }
+        resolveConflicts();
     }
 
     /**
@@ -382,6 +383,54 @@ public class ParsingTable {
         if (!actions.contains(action2)) {
             actions.add(action2);
         }
+    }
+    // Add this method to ParsingTable class
+
+    /**
+     * Resolve shift/reduce conflicts using standard rules:
+     * - For if-then-else: always prefer shift over reduce (else attaches to closest if)
+     * - For other conflicts: can be customized
+     */
+    private void resolveConflicts() {
+        for (Map.Entry<Integer, Map<String, List<Action>>> stateEntry : conflictTable.entrySet()) {
+            int state = stateEntry.getKey();
+            Map<String, List<Action>> conflicts = stateEntry.getValue();
+
+            for (Map.Entry<String, List<Action>> symbolEntry : conflicts.entrySet()) {
+                String symbol = symbolEntry.getKey();
+                List<Action> actions = symbolEntry.getValue();
+
+                // Check if this is a shift/reduce conflict with 'else'
+                boolean hasShift = actions.stream().anyMatch(a -> a.type == Action.Type.SHIFT);
+                boolean hasReduce = actions.stream().anyMatch(a -> a.type == Action.Type.REDUCE);
+
+                if (hasShift && hasReduce && symbol.equals("else")) {
+                    // Resolve by preferring SHIFT (else attaches to closest if)
+                    Action shiftAction = actions.stream()
+                            .filter(a -> a.type == Action.Type.SHIFT)
+                            .findFirst().get();
+
+                    // Replace conflict with shift action
+                    actionTable.get(state).put(symbol, shiftAction);
+
+                    System.out.println("Resolved shift/reduce conflict in state " + state +
+                            " on '" + symbol + "' by preferring shift (else matches closest if)");
+                }
+            }
+        }
+
+        // Re-check if all conflicts are resolved
+        isSlrParseable = conflictTable.isEmpty() || !hasUnresolvedConflicts();
+    }
+
+    private boolean hasUnresolvedConflicts() {
+        // Check if there are any conflicts that weren't resolved
+        for (Map<String, List<Action>> conflicts : conflictTable.values()) {
+            if (!conflicts.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
