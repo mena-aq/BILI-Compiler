@@ -13,7 +13,15 @@ public class Main {
             System.exit(1);
         }
 
-        // Get base directory from grammar file path
+        // Check for benchmark flag
+        boolean runBenchmark = false;
+        for (String arg : args) {
+            if (arg.equals("--benchmark")) {
+                runBenchmark = true;
+                break;
+            }
+        }
+
         // Grammar files are in src/BottomUpParser/input/, so we need the grandparent directory
         File grammarFilePath = new File(args[0]);
         String baseDir = grammarFilePath.getParent();
@@ -31,9 +39,10 @@ public class Main {
         OutputWriter outputWriter = new OutputWriter(baseDir);
         outputWriter.openWriters();
 
+        // Create a new grammar instance
+        Grammar grammar = new Grammar();
+
         try {
-            // Create a new grammar instance
-            Grammar grammar = new Grammar();
 
             // Parse the grammar from the file provided as a command-line argument
             String grammarFile = args[0];
@@ -201,12 +210,14 @@ public class Main {
                     System.err.println("Error reading input file for LR(1): " + e.getMessage());
                 }
             }
-
-            // Exit with status code based on parseability
-            System.exit(isSlrParseable ? 0 : 1);
         } finally {
             // Always close writers
             outputWriter.closeWriters();
+
+            // Run benchmarks if requested (at the very end, after all parsing)
+            if (runBenchmark) {
+                PerformanceBenchmark.benchmark(grammar);
+            }
         }
     }
 }

@@ -116,6 +116,7 @@ public class ParsingTable {
     private final Map<Integer, Map<String, Integer>> gotoTable;
     private final Map<Integer, Map<String, List<Action>>> conflictTable; // Store conflicting actions
     private final List<Conflict> conflicts;
+    private final List<Conflict> resolvedConflicts; // Conflicts resolved by the disambiguating rule
     private boolean isSlrParseable;
     private final Grammar grammar;
     private final List<Set<Items.LRItem>> canonicalCollection;
@@ -142,6 +143,7 @@ public class ParsingTable {
         this.gotoTable = new HashMap<>();
         this.conflictTable = new HashMap<>();
         this.conflicts = new ArrayList<>();
+        this.resolvedConflicts = new ArrayList<>();
         this.isSlrParseable = true;
         this.stateMap = new HashMap<>();
         this.useLookaheads = useLookaheads;
@@ -329,6 +331,8 @@ public class ParsingTable {
                     String details = "shift " + targetState + " vs " + existing;
                     conflicts.add(new Conflict(stateIndex, symbol, Conflict.ConflictType.SHIFT_REDUCE, details));
                     isSlrParseable = false;
+                    // Store both actions so resolveConflicts() can apply the disambiguating rule
+                    storeConflictingActions(stateIndex, symbol, shiftAction, existing);
                 }
                 actionRow.put(symbol, shiftAction);
             }
@@ -392,35 +396,46 @@ public class ParsingTable {
      * - For other conflicts: can be customized
      */
     private void resolveConflicts() {
+        // Apply disambiguation only for LR(1)
+        if (!useLookaheads) {
+            return;
+        }
+
         for (Map.Entry<Integer, Map<String, List<Action>>> stateEntry : conflictTable.entrySet()) {
             int state = stateEntry.getKey();
-            Map<String, List<Action>> conflicts = stateEntry.getValue();
+            Map<String, List<Action>> conflictMap = stateEntry.getValue();
 
-            for (Map.Entry<String, List<Action>> symbolEntry : conflicts.entrySet()) {
+            for (Map.Entry<String, List<Action>> symbolEntry : conflictMap.entrySet()) {
                 String symbol = symbolEntry.getKey();
                 List<Action> actions = symbolEntry.getValue();
 
-                // Check if this is a shift/reduce conflict with 'else'
                 boolean hasShift = actions.stream().anyMatch(a -> a.type == Action.Type.SHIFT);
                 boolean hasReduce = actions.stream().anyMatch(a -> a.type == Action.Type.REDUCE);
 
-                if (hasShift && hasReduce && symbol.equals("else")) {
-                    // Resolve by preferring SHIFT (else attaches to closest if)
+                if (hasShift && hasReduce) {
+                    // Disambiguating rule: SHIFT > REDUCE
                     Action shiftAction = actions.stream()
                             .filter(a -> a.type == Action.Type.SHIFT)
-                            .findFirst().get();
+                            .findFirst().orElse(null);
+                    if (shiftAction != null) {
+                        actionTable.get(state).put(symbol, shiftAction);
+                    }
 
-                    // Replace conflict with shift action
-                    actionTable.get(state).put(symbol, shiftAction);
-
-                    System.out.println("Resolved shift/reduce conflict in state " + state +
-                            " on '" + symbol + "' by preferring shift (else matches closest if)");
+                    // Track this specific conflict as resolved in the summary
+                    for (Conflict c : conflicts) {
+                        if (c.type == Conflict.ConflictType.SHIFT_REDUCE && c.state == state && c.symbol.equals(symbol)) {
+                            if (!resolvedConflicts.contains(c)) {
+                                resolvedConflicts.add(c);
+                            }
+                            break;
+                        }
+                    }
                 }
             }
         }
 
-        // Re-check if all conflicts are resolved
-        isSlrParseable = conflictTable.isEmpty() || !hasUnresolvedConflicts();
+        // Flag parseability based on unresolved conflicts
+        isSlrParseable = (conflicts.size() - resolvedConflicts.size()) <= 0;
     }
 
     private boolean hasUnresolvedConflicts() {
@@ -611,18 +626,28 @@ public class ParsingTable {
         // Print summary
         String tableType = useLookaheads ? "LR(1)" : "SLR(1)";
         System.out.println("Parser Type: " + tableType);
-        System.out.println("Is " + tableType + " Parseable: " + (isSlrParseable ? "YES" : "NO"));
-        System.out.println("Conflicts Found: " + conflicts.size());
+        int initialConflicts = conflicts.size();
+        int resolvedCount = resolvedConflicts.size();
+        int remaining = Math.max(0, initialConflicts - resolvedCount);
 
-        if (!conflicts.isEmpty()) {
-            System.out.println("\nConflicts ");
+        System.out.println("Is " + tableType + " Parseable: " + ((remaining == 0) ? "YES" : "NO"));
+        System.out.println("Conflicts Found: " + initialConflicts);
+
+        if (initialConflicts > 0) {
+            System.out.println("\nConflicts");
             for (Conflict conflict : conflicts) {
-                System.out.println(conflict);
+                if (resolvedConflicts.contains(conflict)) {
+                    System.out.println("RESOLVED (Shift > Reduce): " + conflict);
+                } else {
+                    System.out.println(conflict);
+                }
             }
+            System.out.println("Resolved by Disambiguating Rule (Shift > Reduce): " + resolvedCount);
+            System.out.println("Remaining Conflicts: " + remaining);
         }
         System.out.println();
 
-        return isSlrParseable;
+        return remaining == 0;
     }
 
     /**

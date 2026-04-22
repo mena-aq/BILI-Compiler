@@ -1,3 +1,2 @@
-id + * id
-( id + id
-id + id )
+if id then
+if id then other else
