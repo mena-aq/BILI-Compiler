@@ -1,0 +1,46 @@
+=== CANONICAL COLLECTION (DFA STATES) - SLR(1) ===
+
+I0:
+  Stmt -> . other
+  Stmt' -> . Stmt
+  Stmt -> . if Expr then Stmt else Stmt
+  Stmt -> . if Expr then Stmt
+
+I1:
+  Stmt -> other .
+
+I2:
+  Stmt -> if . Expr then Stmt else Stmt
+  Stmt -> if . Expr then Stmt
+  Expr -> . id
+
+I3:
+  Stmt' -> Stmt .
+
+I4:
+  Stmt -> if Expr . then Stmt else Stmt
+  Stmt -> if Expr . then Stmt
+
+I5:
+  Expr -> id .
+
+I6:
+  Stmt -> if Expr then . Stmt else Stmt
+  Stmt -> if Expr then . Stmt
+  Stmt -> . other
+  Stmt -> . if Expr then Stmt else Stmt
+  Stmt -> . if Expr then Stmt
+
+I7:
+  Stmt -> if Expr then Stmt . else Stmt
+  Stmt -> if Expr then Stmt .
+
+I8:
+  Stmt -> if Expr then Stmt else . Stmt
+  Stmt -> . other
+  Stmt -> . if Expr then Stmt else Stmt
+  Stmt -> . if Expr then Stmt
+
+I9:
+  Stmt -> if Expr then Stmt else Stmt .
+

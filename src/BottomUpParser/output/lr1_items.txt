@@ -1,0 +1,100 @@
+=== CANONICAL COLLECTION (DFA STATES) - LR(1) ===
+
+Note: Items include lookahead information in brackets
+
+I0:
+  Stmt -> . if Expr then Stmt else Stmt, [$]
+  Stmt -> . if Expr then Stmt, [$]
+  Stmt -> . other, [$]
+  Stmt' -> . Stmt, [$]
+
+I1:
+  Stmt -> other ., [$]
+
+I2:
+  Expr -> . id, [then]
+  Stmt -> if . Expr then Stmt else Stmt, [$]
+  Stmt -> if . Expr then Stmt, [$]
+
+I3:
+  Stmt' -> Stmt ., [$]
+
+I4:
+  Stmt -> if Expr . then Stmt else Stmt, [$]
+  Stmt -> if Expr . then Stmt, [$]
+
+I5:
+  Expr -> id ., [then]
+
+I6:
+  Stmt -> . if Expr then Stmt else Stmt, [$]
+  Stmt -> . if Expr then Stmt else Stmt, [else]
+  Stmt -> . if Expr then Stmt, [$]
+  Stmt -> . if Expr then Stmt, [else]
+  Stmt -> . other, [$]
+  Stmt -> . other, [else]
+  Stmt -> if Expr then . Stmt else Stmt, [$]
+  Stmt -> if Expr then . Stmt, [$]
+
+I7:
+  Stmt -> other ., [$]
+  Stmt -> other ., [else]
+
+I8:
+  Expr -> . id, [then]
+  Stmt -> if . Expr then Stmt else Stmt, [$]
+  Stmt -> if . Expr then Stmt else Stmt, [else]
+  Stmt -> if . Expr then Stmt, [$]
+  Stmt -> if . Expr then Stmt, [else]
+
+I9:
+  Stmt -> if Expr then Stmt . else Stmt, [$]
+  Stmt -> if Expr then Stmt ., [$]
+
+I10:
+  Stmt -> if Expr . then Stmt else Stmt, [$]
+  Stmt -> if Expr . then Stmt else Stmt, [else]
+  Stmt -> if Expr . then Stmt, [else]
+  Stmt -> if Expr . then Stmt, [$]
+
+I11:
+  Stmt -> . if Expr then Stmt else Stmt, [$]
+  Stmt -> . if Expr then Stmt, [$]
+  Stmt -> . other, [$]
+  Stmt -> if Expr then Stmt else . Stmt, [$]
+
+I12:
+  Stmt -> . if Expr then Stmt else Stmt, [$]
+  Stmt -> . if Expr then Stmt else Stmt, [else]
+  Stmt -> . if Expr then Stmt, [$]
+  Stmt -> . if Expr then Stmt, [else]
+  Stmt -> . other, [$]
+  Stmt -> . other, [else]
+  Stmt -> if Expr then . Stmt else Stmt, [$]
+  Stmt -> if Expr then . Stmt else Stmt, [else]
+  Stmt -> if Expr then . Stmt, [else]
+  Stmt -> if Expr then . Stmt, [$]
+
+I13:
+  Stmt -> if Expr then Stmt else Stmt ., [$]
+
+I14:
+  Stmt -> if Expr then Stmt . else Stmt, [$]
+  Stmt -> if Expr then Stmt . else Stmt, [else]
+  Stmt -> if Expr then Stmt ., [else]
+  Stmt -> if Expr then Stmt ., [$]
+
+I15:
+  Stmt -> . if Expr then Stmt else Stmt, [$]
+  Stmt -> . if Expr then Stmt else Stmt, [else]
+  Stmt -> . if Expr then Stmt, [$]
+  Stmt -> . if Expr then Stmt, [else]
+  Stmt -> . other, [$]
+  Stmt -> . other, [else]
+  Stmt -> if Expr then Stmt else . Stmt, [$]
+  Stmt -> if Expr then Stmt else . Stmt, [else]
+
+I16:
+  Stmt -> if Expr then Stmt else Stmt ., [$]
+  Stmt -> if Expr then Stmt else Stmt ., [else]
+

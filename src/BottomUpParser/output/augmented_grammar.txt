@@ -1,0 +1,17 @@
+=== AUGMENTED GRAMMAR ===
+
+Stmt' -> Stmt
+Stmt -> if Expr then Stmt | if Expr then Stmt else Stmt | other
+Expr -> id
+
+=== FIRST SETS ===
+
+First(Stmt') = [other, if]
+First(Stmt) = [other, if]
+First(Expr) = [id]
+
+=== FOLLOW SETS ===
+
+Follow(Stmt') = [$]
+Follow(Stmt) = [$, else]
+Follow(Expr) = [then]

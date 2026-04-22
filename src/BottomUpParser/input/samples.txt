@@ -1,0 +1,59 @@
+#--------------------------- grammar 1 (slr+)
+# valid
+id
+id + id
+id + id + id
+id + id + id + id
+id + id + id + id + id
+
+#invalid
+id * id
+id +
++ id
+id + id +
+id id
+
+# ----------------------- grammar 2 (slr+)
+# valid
+id
+id + id
+id * id
+id + id * id
+( id + id ) * id
+
+# invalid
+id + * id
+( id + id
+id + id )
++ id * id
+id * ( id +
+
+# ---------------------------- grammar 3 (lr1+)
+# valid
+id
+* id
+id = id
+* id = id
+* * id = id
+
+# invalid
+=
+id =
+= id
+id = = id
+* = id
+
+# ---------------------- grammar 4 (lr1+)
+# valid
+other
+if id then other
+if id then other else other
+if id then if id then other else other
+if id then if id then other else if id then other
+
+# invalid
+if then other
+if id then
+if id then other else
+if id then other else if then other
+if id then other other
