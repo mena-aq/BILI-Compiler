@@ -1,0 +1,206 @@
+=== CANONICAL COLLECTION (DFA STATES) - LR(1) ===
+
+Note: Items include lookahead information in brackets
+
+I0:
+  Expr -> . Expr + Term, [$]
+  Expr -> . Expr + Term, [+]
+  Expr -> . Term, [$]
+  Expr -> . Term, [+]
+  Expr' -> . Expr, [$]
+  Factor -> . ( Expr ), [+]
+  Factor -> . ( Expr ), [*]
+  Factor -> . ( Expr ), [$]
+  Factor -> . id, [$]
+  Factor -> . id, [+]
+  Factor -> . id, [*]
+  Term -> . Factor, [$]
+  Term -> . Factor, [*]
+  Term -> . Factor, [+]
+  Term -> . Term * Factor, [$]
+  Term -> . Term * Factor, [*]
+  Term -> . Term * Factor, [+]
+
+I1:
+  Expr -> Expr . + Term, [$]
+  Expr -> Expr . + Term, [+]
+  Expr' -> Expr ., [$]
+
+I2:
+  Term -> Factor ., [$]
+  Term -> Factor ., [*]
+  Term -> Factor ., [+]
+
+I3:
+  Expr -> . Expr + Term, [+]
+  Expr -> . Expr + Term, [)]
+  Expr -> . Term, [+]
+  Expr -> . Term, [)]
+  Factor -> . ( Expr ), [+]
+  Factor -> . ( Expr ), [)]
+  Factor -> . ( Expr ), [*]
+  Factor -> . id, [+]
+  Factor -> . id, [*]
+  Factor -> . id, [)]
+  Factor -> ( . Expr ), [*]
+  Factor -> ( . Expr ), [+]
+  Factor -> ( . Expr ), [$]
+  Term -> . Factor, [)]
+  Term -> . Factor, [*]
+  Term -> . Factor, [+]
+  Term -> . Term * Factor, [)]
+  Term -> . Term * Factor, [*]
+  Term -> . Term * Factor, [+]
+
+I4:
+  Expr -> Term ., [$]
+  Expr -> Term ., [+]
+  Term -> Term . * Factor, [$]
+  Term -> Term . * Factor, [*]
+  Term -> Term . * Factor, [+]
+
+I5:
+  Factor -> id ., [+]
+  Factor -> id ., [*]
+  Factor -> id ., [$]
+
+I6:
+  Expr -> Expr + . Term, [$]
+  Expr -> Expr + . Term, [+]
+  Factor -> . ( Expr ), [+]
+  Factor -> . ( Expr ), [*]
+  Factor -> . ( Expr ), [$]
+  Factor -> . id, [$]
+  Factor -> . id, [+]
+  Factor -> . id, [*]
+  Term -> . Factor, [$]
+  Term -> . Factor, [*]
+  Term -> . Factor, [+]
+  Term -> . Term * Factor, [$]
+  Term -> . Term * Factor, [*]
+  Term -> . Term * Factor, [+]
+
+I7:
+  Expr -> Expr . + Term, [)]
+  Expr -> Expr . + Term, [+]
+  Factor -> ( Expr . ), [$]
+  Factor -> ( Expr . ), [*]
+  Factor -> ( Expr . ), [+]
+
+I8:
+  Term -> Factor ., [)]
+  Term -> Factor ., [*]
+  Term -> Factor ., [+]
+
+I9:
+  Expr -> . Expr + Term, [+]
+  Expr -> . Expr + Term, [)]
+  Expr -> . Term, [+]
+  Expr -> . Term, [)]
+  Factor -> . ( Expr ), [+]
+  Factor -> . ( Expr ), [)]
+  Factor -> . ( Expr ), [*]
+  Factor -> . id, [+]
+  Factor -> . id, [*]
+  Factor -> . id, [)]
+  Factor -> ( . Expr ), [)]
+  Factor -> ( . Expr ), [*]
+  Factor -> ( . Expr ), [+]
+  Term -> . Factor, [)]
+  Term -> . Factor, [*]
+  Term -> . Factor, [+]
+  Term -> . Term * Factor, [)]
+  Term -> . Term * Factor, [*]
+  Term -> . Term * Factor, [+]
+
+I10:
+  Expr -> Term ., [)]
+  Expr -> Term ., [+]
+  Term -> Term . * Factor, [)]
+  Term -> Term . * Factor, [*]
+  Term -> Term . * Factor, [+]
+
+I11:
+  Factor -> id ., [+]
+  Factor -> id ., [*]
+  Factor -> id ., [)]
+
+I12:
+  Factor -> . ( Expr ), [+]
+  Factor -> . ( Expr ), [*]
+  Factor -> . ( Expr ), [$]
+  Factor -> . id, [$]
+  Factor -> . id, [+]
+  Factor -> . id, [*]
+  Term -> Term * . Factor, [*]
+  Term -> Term * . Factor, [+]
+  Term -> Term * . Factor, [$]
+
+I13:
+  Expr -> Expr + Term ., [$]
+  Expr -> Expr + Term ., [+]
+  Term -> Term . * Factor, [$]
+  Term -> Term . * Factor, [*]
+  Term -> Term . * Factor, [+]
+
+I14:
+  Factor -> ( Expr ) ., [$]
+  Factor -> ( Expr ) ., [*]
+  Factor -> ( Expr ) ., [+]
+
+I15:
+  Expr -> Expr + . Term, [)]
+  Expr -> Expr + . Term, [+]
+  Factor -> . ( Expr ), [+]
+  Factor -> . ( Expr ), [)]
+  Factor -> . ( Expr ), [*]
+  Factor -> . id, [+]
+  Factor -> . id, [*]
+  Factor -> . id, [)]
+  Term -> . Factor, [)]
+  Term -> . Factor, [*]
+  Term -> . Factor, [+]
+  Term -> . Term * Factor, [)]
+  Term -> . Term * Factor, [*]
+  Term -> . Term * Factor, [+]
+
+I16:
+  Expr -> Expr . + Term, [)]
+  Expr -> Expr . + Term, [+]
+  Factor -> ( Expr . ), [)]
+  Factor -> ( Expr . ), [*]
+  Factor -> ( Expr . ), [+]
+
+I17:
+  Factor -> . ( Expr ), [+]
+  Factor -> . ( Expr ), [)]
+  Factor -> . ( Expr ), [*]
+  Factor -> . id, [+]
+  Factor -> . id, [*]
+  Factor -> . id, [)]
+  Term -> Term * . Factor, [)]
+  Term -> Term * . Factor, [*]
+  Term -> Term * . Factor, [+]
+
+I18:
+  Term -> Term * Factor ., [*]
+  Term -> Term * Factor ., [+]
+  Term -> Term * Factor ., [$]
+
+I19:
+  Expr -> Expr + Term ., [)]
+  Expr -> Expr + Term ., [+]
+  Term -> Term . * Factor, [)]
+  Term -> Term . * Factor, [*]
+  Term -> Term . * Factor, [+]
+
+I20:
+  Factor -> ( Expr ) ., [*]
+  Factor -> ( Expr ) ., [+]
+  Factor -> ( Expr ) ., [)]
+
+I21:
+  Term -> Term * Factor ., [)]
+  Term -> Term * Factor ., [*]
+  Term -> Term * Factor ., [+]
+

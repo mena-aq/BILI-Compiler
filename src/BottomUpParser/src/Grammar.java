@@ -309,7 +309,7 @@ public class Grammar {
     /**
      * Helper method to check if a symbol is a non-terminal
      */
-    private boolean isNonTerminal(String symbol) {
+    public boolean isNonTerminal(String symbol) {
         return productions.containsKey(symbol);
     }
 

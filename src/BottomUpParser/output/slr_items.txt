@@ -1,4 +1,4 @@
-=== CANONICAL COLLECTION (DFA STATES) ===
+=== CANONICAL COLLECTION (DFA STATES) - SLR(1) ===
 
 I0:
   Factor -> . ( Expr )

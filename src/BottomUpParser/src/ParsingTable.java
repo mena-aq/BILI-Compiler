@@ -210,7 +210,7 @@ public class ParsingTable {
             for (Items.LRItem item : state) {
                 if (item.dotPosition < item.rhs.size()) {
                     // Shift actions: A -> α • X β
-                    processLR1ShiftActions(item, state, stateIndex, actionRow, gotoRow);
+                    processLR1ShiftActions(item, state, stateIndex, actionRow, gotoRow); // Changed to LR1 version
                 } else {
                     // Reduce actions or accept: A -> α •
                     processLR1ReduceActions(item, stateIndex, actionRow);
@@ -251,16 +251,6 @@ public class ParsingTable {
                 actionRow.put(symbol, shiftAction);
             }
         }
-    }
-
-    /**
-     * Process shift actions for LR(1) table
-     */
-    private void processLR1ShiftActions(Items.LRItem item, Set<Items.LRItem> state,
-                                       int stateIndex, Map<String, Action> actionRow,
-                                       Map<String, Integer> gotoRow) {
-        // Same as SLR for shift actions (lookaheads only affect reduce)
-        processSLRShiftActions(item, state, stateIndex, actionRow, gotoRow);
     }
 
     /**
@@ -305,6 +295,41 @@ public class ParsingTable {
 
             for (String terminal : reduceSymbols) {
                 addReduceAction(terminal, production, item, stateIndex, actionRow);
+            }
+        }
+    }
+
+    // Add this method to your ParsingTable class:
+
+    /**
+     * Process shift actions for LR(1) table using LR(1) GOTO
+     */
+    private void processLR1ShiftActions(Items.LRItem item, Set<Items.LRItem> state,
+                                        int stateIndex, Map<String, Action> actionRow,
+                                        Map<String, Integer> gotoRow) {
+        String symbol = item.rhs.get(item.dotPosition);
+
+        // Use LR(1) GOTO for shift actions
+        Set<Items.LRItem> gotoState = Items.goToLR1(state, symbol, grammar);
+
+        if (!gotoState.isEmpty() && stateMap.containsKey(gotoState)) {
+            int targetState = stateMap.get(gotoState);
+
+            if (isNonTerminal(symbol)) {
+                // GOTO action
+                gotoRow.put(symbol, targetState);
+            } else {
+                // SHIFT action (terminal)
+                Action shiftAction = Action.shift(targetState);
+                Action existing = actionRow.get(symbol);
+
+                if (existing != null && existing.type != Action.Type.SHIFT) {
+                    // Conflict: shift/reduce
+                    String details = "shift " + targetState + " vs " + existing;
+                    conflicts.add(new Conflict(stateIndex, symbol, Conflict.ConflictType.SHIFT_REDUCE, details));
+                    isSlrParseable = false;
+                }
+                actionRow.put(symbol, shiftAction);
             }
         }
     }

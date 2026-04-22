@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * Utility class to handle writing output to files.
- * Creates and manages the output directory structure for SLR parser results.
+ * Creates and manages the output directory structure for SLR and LR(1) parser results.
  */
 public class OutputWriter {
     private final Path outputDir;
@@ -15,6 +15,11 @@ public class OutputWriter {
     private PrintWriter slrTableWriter;
     private PrintWriter slrTraceWriter;
     private PrintWriter parseTreeWriter;
+
+    // LR(1) writers
+    private PrintWriter lr1ItemsWriter;
+    private PrintWriter lr1TableWriter;
+    private PrintWriter lr1TraceWriter;
 
     /**
      * Constructor initializes the output directory
@@ -49,6 +54,17 @@ public class OutputWriter {
             parseTreeWriter = new PrintWriter(
                     new FileWriter(outputDir.resolve("parse_trees.txt").toFile())
             );
+
+            // LR(1) writers
+            lr1ItemsWriter = new PrintWriter(
+                    new FileWriter(outputDir.resolve("lr1_items.txt").toFile())
+            );
+            lr1TableWriter = new PrintWriter(
+                    new FileWriter(outputDir.resolve("lr1_parsing_table.txt").toFile())
+            );
+            lr1TraceWriter = new PrintWriter(
+                    new FileWriter(outputDir.resolve("lr1_trace.txt").toFile())
+            );
         } catch (IOException e) {
             throw new RuntimeException("Failed to open output writers: " + e.getMessage(), e);
         }
@@ -63,6 +79,11 @@ public class OutputWriter {
         if (slrTableWriter != null) slrTableWriter.close();
         if (slrTraceWriter != null) slrTraceWriter.close();
         if (parseTreeWriter != null) parseTreeWriter.close();
+
+        // Close LR(1) writers
+        if (lr1ItemsWriter != null) lr1ItemsWriter.close();
+        if (lr1TableWriter != null) lr1TableWriter.close();
+        if (lr1TraceWriter != null) lr1TraceWriter.close();
     }
 
     /**
@@ -105,7 +126,7 @@ public class OutputWriter {
      * Writes all SLR items (canonical collection) to file
      */
     public void writeSLRItems(List<Set<Items.LRItem>> canonicalCollection) {
-        slrItemsWriter.println("=== CANONICAL COLLECTION (DFA STATES) ===\n");
+        slrItemsWriter.println("=== CANONICAL COLLECTION (DFA STATES) - SLR(1) ===\n");
 
         for (int i = 0; i < canonicalCollection.size(); i++) {
             slrItemsWriter.println("I" + i + ":");
@@ -136,9 +157,53 @@ public class OutputWriter {
     }
 
     /**
+     * Writes all LR(1) items (canonical collection with lookaheads) to file
+     */
+    public void writeLR1Items(List<Set<Items.LRItem>> canonicalCollection) {
+        lr1ItemsWriter.println("=== CANONICAL COLLECTION (DFA STATES) - LR(1) ===\n");
+        lr1ItemsWriter.println("Note: Items include lookahead information in brackets\n");
+
+        for (int i = 0; i < canonicalCollection.size(); i++) {
+            lr1ItemsWriter.println("I" + i + ":");
+
+            // Sort items for consistent output
+            List<Items.LRItem> sortedItems = new ArrayList<>(canonicalCollection.get(i));
+            sortedItems.sort((a, b) -> {
+                int cmp = a.lhs.compareTo(b.lhs);
+                if (cmp != 0) return cmp;
+                cmp = Integer.compare(a.dotPosition, b.dotPosition);
+                if (cmp != 0) return cmp;
+                return a.rhs.toString().compareTo(b.rhs.toString());
+            });
+
+            for (Items.LRItem item : sortedItems) {
+                lr1ItemsWriter.println("  " + item);
+            }
+            lr1ItemsWriter.println();
+        }
+
+        lr1ItemsWriter.flush();
+    }
+
+    /**
      * Writes the SLR parsing table to file using formatted table output
      */
     public void writeSLRTable(ParsingTable parsingTable, List<Set<Items.LRItem>> canonicalCollection, Grammar grammar) {
+        writeParsingTable(parsingTable, canonicalCollection, grammar, slrTableWriter, "SLR(1)");
+    }
+
+    /**
+     * Writes the LR(1) parsing table to file using formatted table output
+     */
+    public void writeLR1Table(ParsingTable parsingTable, List<Set<Items.LRItem>> canonicalCollection, Grammar grammar) {
+        writeParsingTable(parsingTable, canonicalCollection, grammar, lr1TableWriter, "LR(1)");
+    }
+
+    /**
+     * Generic method to write parsing table to file
+     */
+    private void writeParsingTable(ParsingTable parsingTable, List<Set<Items.LRItem>> canonicalCollection,
+                                   Grammar grammar, PrintWriter writer, String parserType) {
         // Collect all terminals and non-terminals
         Set<String> terminals = new TreeSet<>();
         Set<String> nonTerminals = new TreeSet<>();
@@ -182,38 +247,38 @@ public class OutputWriter {
             columnWidths.put(symbol, maxWidth + 2); // Add padding
         }
 
-        slrTableWriter.println("=== SLR(1) PARSING TABLE ===\n");
+        writer.println("=== " + parserType + " PARSING TABLE ===\n");
 
         // Print top border
-        slrTableWriter.print("┌");
-        slrTableWriter.print("─".repeat(stateWidth));
+        writer.print("┌");
+        writer.print("─".repeat(stateWidth));
         for (String symbol : allSymbols) {
-            slrTableWriter.print("┬");
-            slrTableWriter.print("─".repeat(columnWidths.get(symbol)));
+            writer.print("┬");
+            writer.print("─".repeat(columnWidths.get(symbol)));
         }
-        slrTableWriter.println("┐");
+        writer.println("┐");
 
         // Print header
-        slrTableWriter.print("│");
-        slrTableWriter.printf(" %-" + (stateWidth - 1) + "s│", "State");
+        writer.print("│");
+        writer.printf(" %-" + (stateWidth - 1) + "s│", "State");
         for (String symbol : allSymbols) {
-            slrTableWriter.printf(" %-" + (columnWidths.get(symbol) - 1) + "s│", symbol);
+            writer.printf(" %-" + (columnWidths.get(symbol) - 1) + "s│", symbol);
         }
-        slrTableWriter.println();
+        writer.println();
 
         // Print separator after header
-        slrTableWriter.print("├");
-        slrTableWriter.print("─".repeat(stateWidth));
+        writer.print("├");
+        writer.print("─".repeat(stateWidth));
         for (String symbol : allSymbols) {
-            slrTableWriter.print("┼");
-            slrTableWriter.print("─".repeat(columnWidths.get(symbol)));
+            writer.print("┼");
+            writer.print("─".repeat(columnWidths.get(symbol)));
         }
-        slrTableWriter.println("┤");
+        writer.println("┤");
 
         // Print rows
         for (int state = 0; state < canonicalCollection.size(); state++) {
-            slrTableWriter.print("│");
-            slrTableWriter.printf(" %-" + (stateWidth - 1) + "s│", state);
+            writer.print("│");
+            writer.printf(" %-" + (stateWidth - 1) + "s│", state);
 
             for (String symbol : allSymbols) {
                 String cellStr;
@@ -228,53 +293,69 @@ public class OutputWriter {
                     Integer gotoState = parsingTable.getGoto(state, symbol);
                     cellStr = gotoState != null ? String.valueOf(gotoState) : "-";
                 }
-                slrTableWriter.printf(" %-" + (columnWidths.get(symbol) - 1) + "s│", cellStr);
+                writer.printf(" %-" + (columnWidths.get(symbol) - 1) + "s│", cellStr);
             }
-            slrTableWriter.println();
+            writer.println();
         }
 
         // Print bottom border
-        slrTableWriter.print("└");
-        slrTableWriter.print("─".repeat(stateWidth));
+        writer.print("└");
+        writer.print("─".repeat(stateWidth));
         for (String symbol : allSymbols) {
-            slrTableWriter.print("┴");
-            slrTableWriter.print("─".repeat(columnWidths.get(symbol)));
+            writer.print("┴");
+            writer.print("─".repeat(columnWidths.get(symbol)));
         }
-        slrTableWriter.println("┘");
+        writer.println("┘");
 
         // Print summary
-        slrTableWriter.println("\nParser Type: SLR(1)");
-        slrTableWriter.println("Is SLR(1) Parseable: " + (parsingTable.isSlrParseable() ? "YES" : "NO"));
-        slrTableWriter.println("Conflicts Found: " + parsingTable.getConflicts().size());
+        writer.println("\nParser Type: " + parserType);
+        writer.println("Is Parseable: " + (parsingTable.isSlrParseable() ? "YES" : "NO"));
+        writer.println("Conflicts Found: " + parsingTable.getConflicts().size());
 
         if (!parsingTable.getConflicts().isEmpty()) {
-            slrTableWriter.println("\nConflicts:");
+            writer.println("\nConflicts:");
             for (ParsingTable.Conflict conflict : parsingTable.getConflicts()) {
-                slrTableWriter.println("  " + conflict);
+                writer.println("  " + conflict);
             }
         }
-        slrTableWriter.println();
+        writer.println();
 
-        slrTableWriter.flush();
+        writer.flush();
     }
 
     /**
-     * Writes parsing trace for a single input (without parse tree)
+     * Writes SLR parsing trace for a single input
      */
     public void writeSLRTrace(String inputString, List<SLRParser.ParsingStep> parsingTrace, boolean success, Tree parseTree) {
-        slrTraceWriter.println("=== INPUT: " + inputString + " ===");
-        slrTraceWriter.println("Result: " + (success ? "ACCEPTED" : "REJECTED"));
-        slrTraceWriter.println();
+        writeTrace(inputString, parsingTrace, success, parseTree, slrTraceWriter, "SLR(1)");
+    }
 
-        slrTraceWriter.println(String.format("%-8s %-30s %-20s %s", "Step", "Stack", "Input", "Action"));
-        slrTraceWriter.println("-".repeat(80));
+    /**
+     * Writes LR(1) parsing trace for a single input
+     */
+    public void writeLR1Trace(String inputString, List<SLRParser.ParsingStep> parsingTrace, boolean success, Tree parseTree) {
+        writeTrace(inputString, parsingTrace, success, parseTree, lr1TraceWriter, "LR(1)");
+    }
+
+    /**
+     * Generic method to write parsing trace to file
+     */
+    private void writeTrace(String inputString, List<SLRParser.ParsingStep> parsingTrace,
+                            boolean success, Tree parseTree, PrintWriter writer, String parserType) {
+        writer.println("=== " + parserType + " PARSING TRACE ===");
+        writer.println("=== INPUT: " + inputString + " ===");
+        writer.println("Result: " + (success ? "ACCEPTED" : "REJECTED"));
+        writer.println();
+
+        writer.println(String.format("%-8s %-30s %-20s %s", "Step", "Stack", "Input", "Action"));
+        writer.println("-".repeat(80));
 
         for (SLRParser.ParsingStep step : parsingTrace) {
-            slrTraceWriter.println(step);
+            writer.println(step);
         }
 
-        slrTraceWriter.println("\n" + "=".repeat(80) + "\n");
-        slrTraceWriter.flush();
+        writer.println("\n" + "=".repeat(80) + "\n");
+        writer.flush();
     }
 
     /**
@@ -291,16 +372,4 @@ public class OutputWriter {
             parseTreeWriter.flush();
         }
     }
-
-    /**
-     * Helper method to check if a symbol is a non-terminal
-     */
-    private boolean isNonTerminal(String symbol, Grammar grammar) {
-        return grammar.getProductions(symbol) != null &&
-               !grammar.getProductions(symbol).isEmpty();
-    }
 }
-
-
-
-
