@@ -1,0 +1,67 @@
+=== INPUT: id + id ===
+Result: ACCEPTED
+
+Step     Stack                          Input                Action
+--------------------------------------------------------------------------------
+1        $0id5                          + id $               shift 5
+2        $0Factor2                      + id $               reduce Factor -> id
+3        $0Term4                        + id $               reduce Term -> Factor
+4        $0Expr1                        + id $               reduce Expr -> Term
+5        $0Expr1+6                      id $                 shift 6
+6        $0Expr1+6id5                   $                    shift 5
+7        $0Expr1+6Factor2               $                    reduce Factor -> id
+8        $0Expr1+6Term9                 $                    reduce Term -> Factor
+9        $0Expr1                        $                    reduce Expr -> Expr + Term
+10       $0Expr1                        $                    accept
+
+================================================================================
+
+=== INPUT: id + id * id ===
+Result: ACCEPTED
+
+Step     Stack                          Input                Action
+--------------------------------------------------------------------------------
+1        $0id5                          + id * id $          shift 5
+2        $0Factor2                      + id * id $          reduce Factor -> id
+3        $0Term4                        + id * id $          reduce Term -> Factor
+4        $0Expr1                        + id * id $          reduce Expr -> Term
+5        $0Expr1+6                      id * id $            shift 6
+6        $0Expr1+6id5                   * id $               shift 5
+7        $0Expr1+6Factor2               * id $               reduce Factor -> id
+8        $0Expr1+6Term9                 * id $               reduce Term -> Factor
+9        $0Expr1+6Term9*8               id $                 shift 8
+10       $0Expr1+6Term9*8id5            $                    shift 5
+11       $0Expr1+6Term9*8Factor11       $                    reduce Factor -> id
+12       $0Expr1+6Term9                 $                    reduce Term -> Term * Factor
+13       $0Expr1                        $                    reduce Expr -> Expr + Term
+14       $0Expr1                        $                    accept
+
+================================================================================
+
+=== INPUT: ( id + id ) * id ===
+Result: ACCEPTED
+
+Step     Stack                          Input                Action
+--------------------------------------------------------------------------------
+1        $0(3                           id + id ) * id $     shift 3
+2        $0(3id5                        + id ) * id $        shift 5
+3        $0(3Factor2                    + id ) * id $        reduce Factor -> id
+4        $0(3Term4                      + id ) * id $        reduce Term -> Factor
+5        $0(3Expr7                      + id ) * id $        reduce Expr -> Term
+6        $0(3Expr7+6                    id ) * id $          shift 6
+7        $0(3Expr7+6id5                 ) * id $             shift 5
+8        $0(3Expr7+6Factor2             ) * id $             reduce Factor -> id
+9        $0(3Expr7+6Term9               ) * id $             reduce Term -> Factor
+10       $0(3Expr7                      ) * id $             reduce Expr -> Expr + Term
+11       $0(3Expr7)10                   * id $               shift 10
+12       $0Factor2                      * id $               reduce Factor -> ( Expr )
+13       $0Term4                        * id $               reduce Term -> Factor
+14       $0Term4*8                      id $                 shift 8
+15       $0Term4*8id5                   $                    shift 5
+16       $0Term4*8Factor11              $                    reduce Factor -> id
+17       $0Term4                        $                    reduce Term -> Term * Factor
+18       $0Expr1                        $                    reduce Expr -> Term
+19       $0Expr1                        $                    accept
+
+================================================================================
+

@@ -558,6 +558,20 @@ public class ParsingTable {
         printParsingTable();
     }
 
+    /**
+     * Gets the action table (for file output and analysis)
+     */
+    public Map<Integer, Map<String, Action>> getActionTable() {
+        return new HashMap<>(actionTable);
+    }
+
+    /**
+     * Gets the goto table (for file output and analysis)
+     */
+    public Map<Integer, Map<String, Integer>> getGotoTable() {
+        return new HashMap<>(gotoTable);
+    }
+
 
     /*
     for output files

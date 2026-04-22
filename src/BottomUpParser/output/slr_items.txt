@@ -1,0 +1,60 @@
+=== CANONICAL COLLECTION (DFA STATES) ===
+
+I0:
+  Factor -> . ( Expr )
+  Expr' -> . Expr
+  Term -> . Factor
+  Expr -> . Expr + Term
+  Expr -> . Term
+  Term -> . Term * Factor
+  Factor -> . id
+
+I1:
+  Expr' -> Expr .
+  Expr -> Expr . + Term
+
+I2:
+  Term -> Factor .
+
+I3:
+  Factor -> ( . Expr )
+  Factor -> . ( Expr )
+  Term -> . Factor
+  Expr -> . Expr + Term
+  Expr -> . Term
+  Term -> . Term * Factor
+  Factor -> . id
+
+I4:
+  Term -> Term . * Factor
+  Expr -> Term .
+
+I5:
+  Factor -> id .
+
+I6:
+  Expr -> Expr + . Term
+  Factor -> . ( Expr )
+  Term -> . Factor
+  Term -> . Term * Factor
+  Factor -> . id
+
+I7:
+  Expr -> Expr . + Term
+  Factor -> ( Expr . )
+
+I8:
+  Term -> Term * . Factor
+  Factor -> . ( Expr )
+  Factor -> . id
+
+I9:
+  Expr -> Expr + Term .
+  Term -> Term . * Factor
+
+I10:
+  Factor -> ( Expr ) .
+
+I11:
+  Term -> Term * Factor .
+

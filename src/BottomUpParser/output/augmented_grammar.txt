@@ -1,0 +1,20 @@
+=== AUGMENTED GRAMMAR ===
+
+Expr' -> Expr
+Expr -> Expr + Term | Term
+Term -> Term * Factor | Factor
+Factor -> ( Expr ) | id
+
+=== FIRST SETS ===
+
+First(Expr') = [(, id]
+First(Expr) = [(, id]
+First(Term) = [(, id]
+First(Factor) = [(, id]
+
+=== FOLLOW SETS ===
+
+Follow(Expr') = [$]
+Follow(Expr) = [$, ), +]
+Follow(Term) = [$, ), *, +]
+Follow(Factor) = [$, ), *, +]
