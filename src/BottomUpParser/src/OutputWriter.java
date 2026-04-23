@@ -21,6 +21,9 @@ public class OutputWriter {
     private PrintWriter lr1TableWriter;
     private PrintWriter lr1TraceWriter;
 
+    // Comparison writer
+    private PrintWriter comparisonWriter;
+
     /**
      * Constructor initializes the output directory
      * @param baseDir the base directory where output folder will be created
@@ -65,6 +68,11 @@ public class OutputWriter {
             lr1TraceWriter = new PrintWriter(
                     new FileWriter(outputDir.resolve("lr1_trace.txt").toFile())
             );
+
+            // Comparison writer
+            comparisonWriter = new PrintWriter(
+                    new FileWriter(outputDir.resolve("comparison.txt").toFile())
+            );
         } catch (IOException e) {
             throw new RuntimeException("Failed to open output writers: " + e.getMessage(), e);
         }
@@ -84,6 +92,9 @@ public class OutputWriter {
         if (lr1ItemsWriter != null) lr1ItemsWriter.close();
         if (lr1TableWriter != null) lr1TableWriter.close();
         if (lr1TraceWriter != null) lr1TraceWriter.close();
+
+        // Close comparison writer
+        if (comparisonWriter != null) comparisonWriter.close();
     }
 
     /**
@@ -371,5 +382,118 @@ public class OutputWriter {
             parseTreeWriter.println();
             parseTreeWriter.flush();
         }
+    }
+
+    /**
+     * Writes a comparison of SLR(1) and LR(1) parsing table action sections
+     */
+    public void writeComparison(ParsingTable slrTable, ParsingTable lr1Table,
+                                List<Set<Items.LRItem>> slrCollection,
+                                List<Set<Items.LRItem>> lr1Collection,
+                                Grammar grammar) {
+        comparisonWriter.println("=== PARSING TABLE COMPARISON: SLR(1) vs LR(1) ===\n");
+
+        // SLR(1) Action Table
+        writeActionSection(slrTable, slrCollection, grammar, comparisonWriter, "SLR(1)");
+
+        comparisonWriter.println("\n" + "=".repeat(100) + "\n");
+
+        // LR(1) Action Table
+        writeActionSection(lr1Table, lr1Collection, grammar, comparisonWriter, "LR(1)");
+
+        comparisonWriter.flush();
+    }
+
+    /**
+     * Helper method to write action table section for comparison
+     */
+    private void writeActionSection(ParsingTable parsingTable, List<Set<Items.LRItem>> canonicalCollection,
+                                   Grammar grammar, PrintWriter writer, String parserType) {
+        // Collect all terminals
+        Set<String> terminals = new TreeSet<>();
+        for (Map<String, ParsingTable.Action> row : parsingTable.getActionTable().values()) {
+            terminals.addAll(row.keySet());
+        }
+
+        // Create ordered list of terminals
+        List<String> allSymbols = new ArrayList<>(terminals);
+
+        // Calculate column widths
+        int stateWidth = Math.max("State".length(), String.valueOf(canonicalCollection.size()).length()) + 2;
+        Map<String, Integer> columnWidths = new HashMap<>();
+
+        for (String symbol : allSymbols) {
+            int maxWidth = symbol.length();
+            for (int state = 0; state < canonicalCollection.size(); state++) {
+                ParsingTable.Action action = parsingTable.getAction(state, symbol);
+                String cellStr;
+                if (action.type == ParsingTable.Action.Type.ERROR) {
+                    cellStr = "-";
+                } else {
+                    cellStr = action.toString();
+                }
+                maxWidth = Math.max(maxWidth, cellStr.length());
+            }
+            columnWidths.put(symbol, maxWidth + 2);
+        }
+
+        writer.println(parserType + " ACTION TABLE:");
+        writer.println();
+
+        // Print top border
+        writer.print("┌");
+        writer.print("─".repeat(stateWidth));
+        for (String symbol : allSymbols) {
+            writer.print("┬");
+            writer.print("─".repeat(columnWidths.get(symbol)));
+        }
+        writer.println("┐");
+
+        // Print header
+        writer.print("│");
+        writer.printf(" %-" + (stateWidth - 1) + "s│", "State");
+        for (String symbol : allSymbols) {
+            writer.printf(" %-" + (columnWidths.get(symbol) - 1) + "s│", symbol);
+        }
+        writer.println();
+
+        // Print separator after header
+        writer.print("├");
+        writer.print("─".repeat(stateWidth));
+        for (String symbol : allSymbols) {
+            writer.print("┼");
+            writer.print("─".repeat(columnWidths.get(symbol)));
+        }
+        writer.println("┤");
+
+        // Print rows
+        for (int state = 0; state < canonicalCollection.size(); state++) {
+            writer.print("│");
+            writer.printf(" %-" + (stateWidth - 1) + "s│", state);
+
+            for (String symbol : allSymbols) {
+                ParsingTable.Action action = parsingTable.getAction(state, symbol);
+                String cellStr;
+                if (action.type == ParsingTable.Action.Type.ERROR) {
+                    cellStr = "-";
+                } else {
+                    cellStr = action.toString();
+                }
+                writer.printf(" %-" + (columnWidths.get(symbol) - 1) + "s│", cellStr);
+            }
+            writer.println();
+        }
+
+        // Print bottom border
+        writer.print("└");
+        writer.print("─".repeat(stateWidth));
+        for (String symbol : allSymbols) {
+            writer.print("┴");
+            writer.print("─".repeat(columnWidths.get(symbol)));
+        }
+        writer.println("┘");
+
+        writer.println();
+        writer.println("States: " + canonicalCollection.size());
     }
 }
