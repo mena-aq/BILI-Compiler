@@ -166,6 +166,9 @@ public class Main {
             // Write LR(1) table to file
             outputWriter.writeLR1Table(lr1ParsingTable, lr1CanonicalCollection, grammar);
 
+            // Write comparison of parsing tables
+            outputWriter.writeComparison(slrParsingTable, lr1ParsingTable, canonicalCollection, lr1CanonicalCollection, grammar);
+
             // Compare number of states
             System.out.println("\n--- Comparison ---");
             System.out.println("SLR(1) states: " + canonicalCollection.size());
